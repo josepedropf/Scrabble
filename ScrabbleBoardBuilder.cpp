@@ -66,10 +66,10 @@ int main()
         upper_letters.push_back(toupper(lower_letters[i]));
     
     cout << " ";
-    for (int i = 0; i < boardsize; i++)
+    for (int i = 0; i < boardsize; i++)         // output lower letters column
         cout << lower_letters[i] << "  ";
     cout << endl;
-    for (int i = 0; i < boardsize; i++)
+    for (int i = 0; i < boardsize; i++)         // output upper letters column
         cout << upper_letters[i] << endl;
     
     string pos;
