@@ -29,4 +29,20 @@ using namespace std;
 
 int boardsize = 1;
 
-//Hello -jfred
+int main()
+{
+    cout << "Select the board size (Length of the size of the square): ";
+    while(1)
+    {
+        cin >> boardsize;
+        if (cin.fail() || boardsize < 1 || boardsize > 20)
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Invalid board size (Input a number between 1 and 20)" << endl;
+            cout << "Select the board size (Length of the size of the square): ";
+        }
+        else
+            break;
+    }
+}
