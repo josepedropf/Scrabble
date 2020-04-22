@@ -49,7 +49,7 @@ int main()
     }
     
     fstream wordfile;
-    //wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
+    //wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");  //
     wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
     string content;
 
@@ -58,4 +58,5 @@ int main()
         possible_words.push_back(content);
         //cout << content << endl;
     }
+    wordfile.close();
 }
