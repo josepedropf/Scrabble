@@ -65,5 +65,12 @@ int main()
     for (int i = 0; i < size(lower_letters); i++)
         upper_letters.push_back(toupper(lower_letters[i]));
     
+    cout << " ";
+    for (int i = 0; i < boardsize; i++)
+        cout << lower_letters[i] << "  ";
+    cout << endl;
+    for (int i = 0; i < boardsize; i++)
+        cout << upper_letters[i] << endl;
+    
     string pos;
 }
