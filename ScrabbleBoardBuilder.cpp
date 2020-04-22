@@ -49,8 +49,8 @@ int main()
     }
     
     fstream wordfile;
-    //wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");  //
-    wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
+    //wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
+    wordfile.open("WORDS.TXT");
     string content;
 
     while(getline(wordfile, content))
