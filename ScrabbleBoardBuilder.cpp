@@ -30,6 +30,8 @@ using namespace std;
 
 int boardsize = 1;
 vector <string> possible_words;
+vector <char> lower_letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+vector <char> upper_letters;
 
 int main()
 {
@@ -59,4 +61,9 @@ int main()
         //cout << content << endl;
     }
     wordfile.close();
+    
+    for (int i = 0; i < size(lower_letters); i++)
+        upper_letters.push_back(toupper(lower_letters[i]));
+    
+    string pos;
 }
