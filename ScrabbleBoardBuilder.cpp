@@ -29,6 +29,7 @@ using namespace std;
 #define WHITE 15
 
 int boardsize = 1;
+vector <string> possible_words;
 
 int main()
 {
@@ -47,12 +48,14 @@ int main()
             break;
     }
     
-    ifstream infile;
-    infile.open("WORDS.txt");
+    fstream wordfile;
+    //wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
+    wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
     string content;
 
-    while(getline(infile, content))
+    while(getline(wordfile, content))
     {
-        cout << content << ' ';
+        possible_words.push_back(content);
+        //cout << content << endl;
     }
 }
