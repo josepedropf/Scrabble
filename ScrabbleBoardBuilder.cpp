@@ -46,4 +46,13 @@ int main()
         else
             break;
     }
+    
+    ifstream infile;
+    infile.open("WORDS.txt");
+    string content;
+
+    while(getline(infile, content))
+    {
+        cout << content << ' ';
+    }
 }
