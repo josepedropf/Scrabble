@@ -28,8 +28,9 @@ using namespace std;
 #define YELLOW 14
 #define WHITE 15
 
-int boardsize = 0;
+int boardsize = 0, numborient = 0;
 string pos;
+char orientation;
 vector <int> npos(2, 0);
 vector <string> possible_words;
 vector <char> lower_letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
@@ -112,21 +113,22 @@ int main()
 
     bool empty_board = true;
 
-
     while (pos != "end" || empty_board)
     {
-        cout << endl << "1 Coordinates must be indicated as two letters having in base the board above." << endl;
+        cout << endl << "Coordinates must be indicated as two letters having in base the board above." << endl;
         cout << "Introduce the coordinates of the first letter of the word (or end if you don't want to add more words to the board): ";
             while(1)
             {
                 cin >> pos;
-                if (pos == "end")
+                if (pos == "end" && !empty_board)
                     break;
-                if (cin.fail() || pos.size() != 2)
+                if (cin.fail() || pos.size() != 2 || (pos == "end" && empty_board))
                 {
                     cin.clear();
                     cin.ignore(1000, '\n');
-                    cout << endl << "2 Coordinates must be indicated as two letters having in base the board above." << endl;
+                    if (pos == "end" && empty_board)
+                        cout << endl << "You can't leave the board empty!";
+                    cout << endl << "Coordinates must be indicated as two letters having in base the board above." << endl;
                     cout << "Introduce the coordinates of the first letter of the word (or end if you don't want to add more words to the board): ";
                 }
                 else
@@ -136,19 +138,41 @@ int main()
                     {
                         cin.clear();
                         cin.ignore(1000, '\n');
-                        cout << endl << "3 Coordinates must be indicated as two letters having in base the board above." << endl;
+                        cout << endl << "Coordinates must be indicated as two letters having in base the board above." << endl;
                         cout << "Introduce the coordinates of the first letter of the word (or end if you don't want to add more words to the board): ";
                     }
                     else
                     {
-                        board[npos[0]][npos[1]] = "11";
                         empty_board = false;
+                        board[npos[0]][npos[1]] = "11";
                         break;
                     }
                 }
             }
-            if (pos != "end")
-                cout << endl << "Valid Position!" << endl;
+        if (pos != "end")
+        {
+            cout << endl << "Valid Position!" << endl;
+            cout << "Introduce the word orientation (H for Horizontal || V fo Vertical): ";
+            while(1)
+            {
+                cin >> orientation;
+                if (cin.fail() || (orientation != lower_letters[7] && orientation != lower_letters[21] && orientation != upper_letters[7] && orientation != upper_letters[21]))
+                {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << "Introduce the word orientation (H for Horizontal || V fo Vertical): ";
+                } 
+                else
+                {
+                    if (orientation == 'h' || orientation == 'H')
+                        numborient = 0;
+                    else
+                        numborient = 1;
+                    // WordPlacer
+                    break;
+                }
+            }
+        }
     }
     cout << "done";
 }
