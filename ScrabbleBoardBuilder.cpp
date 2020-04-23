@@ -28,10 +28,41 @@ using namespace std;
 #define YELLOW 14
 #define WHITE 15
 
-int boardsize = 1;
+int boardsize = 0;
+string pos;
+vector <int> npos(2, 0);
 vector <string> possible_words;
 vector <char> lower_letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 vector <char> upper_letters;
+vector <vector<string>> board;
+
+void Letter_to_Int_Pos(vector <int> &numberpos, string normalpos)
+{
+    string lowerpos = normalpos;
+    for (int i=0; i < normalpos.size(); i++)
+    {
+        lowerpos[i] = tolower(int(normalpos[i]));
+    }
+
+    for (int a=0; a < lowerpos.size(); a++)
+    {
+        for (int b=0; b < lower_letters.size(); b++)
+        {
+            if (lowerpos[a] == lower_letters[b])
+            {
+                numberpos[a] = b;
+            }
+        }
+    }
+}
+
+bool ValidPos(vector <int> numberpos, int bsize)
+{
+    if (numberpos[0] < bsize && numberpos[1] < bsize && board[numberpos[0]][numberpos[1]] == "00")
+        return true;
+    else
+        return false;
+}
 
 int main()
 {
@@ -49,10 +80,10 @@ int main()
         else
             break;
     }
-    
+
     fstream wordfile;
-    //wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
-    wordfile.open("WORDS.TXT");
+    wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
+    //wordfile.open("WORDS.TXT");
     string content;
 
     while(getline(wordfile, content))
@@ -61,16 +92,63 @@ int main()
         //cout << content << endl;
     }
     wordfile.close();
-    
+
     for (int i = 0; i < size(lower_letters); i++)
         upper_letters.push_back(toupper(lower_letters[i]));
-    
+
     cout << " ";
-    for (int i = 0; i < boardsize; i++)         // output lower letters column
+    for (int i = 0; i < boardsize; i++)                                 // output lower letters column
         cout << lower_letters[i] << "  ";
     cout << endl;
-    for (int i = 0; i < boardsize; i++)         // output upper letters column
+    for (int i = 0; i < boardsize; i++)                                 // output upper letters column
         cout << upper_letters[i] << endl;
-    
-    string pos;
+
+    vector <string> line(boardsize, "00");
+
+    for (int i = 0; i < boardsize; i++)
+    {
+        board.push_back(line);
+    }
+
+    bool empty_board = true;
+
+
+    while (pos != "end" || empty_board)
+    {
+        cout << endl << "1 Coordinates must be indicated as two letters having in base the board above." << endl;
+        cout << "Introduce the coordinates of the first letter of the word (or end if you don't want to add more words to the board): ";
+            while(1)
+            {
+                cin >> pos;
+                if (pos == "end")
+                    break;
+                if (cin.fail() || pos.size() != 2)
+                {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << endl << "2 Coordinates must be indicated as two letters having in base the board above." << endl;
+                    cout << "Introduce the coordinates of the first letter of the word (or end if you don't want to add more words to the board): ";
+                }
+                else
+                {
+                    Letter_to_Int_Pos(npos, pos);
+                    if (!ValidPos(npos, boardsize))
+                    {
+                        cin.clear();
+                        cin.ignore(1000, '\n');
+                        cout << endl << "3 Coordinates must be indicated as two letters having in base the board above." << endl;
+                        cout << "Introduce the coordinates of the first letter of the word (or end if you don't want to add more words to the board): ";
+                    }
+                    else
+                    {
+                        board[npos[0]][npos[1]] = "11";
+                        empty_board = false;
+                        break;
+                    }
+                }
+            }
+            if (pos != "end")
+                cout << endl << "Valid Position!" << endl;
+    }
+    cout << "done";
 }
