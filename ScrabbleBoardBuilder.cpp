@@ -152,7 +152,7 @@ int main()
         if (pos != "end")
         {
             cout << endl << "Valid Position!" << endl;
-            cout << "Introduce the word orientation (H for Horizontal || V fo Vertical): ";
+            cout << "Introduce the word orientation (H for Horizontal || V for Vertical): ";
             while(1)
             {
                 cin >> orientation;
@@ -160,7 +160,7 @@ int main()
                 {
                     cin.clear();
                     cin.ignore(1000, '\n');
-                    cout << "Introduce the word orientation (H for Horizontal || V fo Vertical): ";
+                    cout << "Introduce the word orientation (H for Horizontal || V for Vertical): ";
                 } 
                 else
                 {
