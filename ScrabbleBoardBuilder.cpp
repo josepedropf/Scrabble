@@ -90,19 +90,44 @@ public:
 
     void PickSize(int &boardsize)
     {
-        cout << "Select the board size (Length of the size of the square): ";
+        string rdecision = "N";
+        cout << "Do you want a random board size? [Y for yes || N for no] ";
         while(1)
         {
-            cin >> boardsize;
-            if (cin.fail() || boardsize < 1 || boardsize > 20)
+            cin >> rdecision;
+            if (cin.fail())
             {
                 cin.clear();
                 cin.ignore(1000, '\n');
-                cout << "Invalid board size (Input a number between 1 and 20)" << endl;
-                cout << "Select the board size (Length of the size of the square): ";
+                cout << "Invalid Input!" << endl;
+                cout << "Do you want a random board size? [Y for yes || N for no] ";
             }
             else
                 break;
+        }
+        Lowerstr(rdecision);
+
+        if (rdecision == "y")
+        {
+            boardsize = rand() % 17 + 4;
+            cout << "Board Size: " << boardsize << endl;
+        }
+        else
+        {
+            cout << "Select the board size [4 to 20] (Length of the size of the square): ";
+            while(1)
+            {
+                cin >> boardsize;
+                if (cin.fail() || boardsize < 4 || boardsize > 20)
+                {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << "Invalid board size (Input a number between 4 and 20)" << endl;
+                    cout << "Select the board size (Length of the size of the square): ";
+                }
+                else
+                    break;
+            }
         }
     }
 
@@ -119,6 +144,39 @@ public:
             //cout << content << endl;
         }
         wordfile.close();
+    }
+
+    void RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> boardd, vector <string> possible_words)
+    {
+        int nwords = rand() % (2 * boardsize) + 4;
+        cout << endl << "Number of Words: " << nwords << endl;
+        bool validword = false;
+        int cl, cc;
+        for (int i = 0; i < nwords; i++)
+        {
+            validword = false;
+            while (!validword)
+            {
+                cl = rand() % boardsize;
+                cc = rand() % boardsize;
+                npos[0] = cl;
+                npos[1] = cc;
+                if (ValidPos(npos, boardsize, boardd))
+                {
+                    if (ValidOrientation(npos, 0, boardsize, boardd))
+                    {
+                        WordPlacer(npos, 0, boardsize, possible_words, boardd);
+                        validword = true;
+                    }
+                    else if (ValidOrientation(npos, 1, boardsize, boardd))
+                    {
+                        WordPlacer(npos, 1, boardsize, possible_words, boardd);
+                        validword = true;
+                    }
+                }
+            }
+        }
+        DrawBoardClean(boardsize, boardd);
     }
 
     void Coordinates(vector <char> lower_letters, vector <char> upper_letters, vector <vector<char>> boardd, int boardsize, vector <int> npos, vector <string> possible_words)
@@ -236,7 +294,6 @@ public:
         int pwsize = possible_words.size();
         for (int a = 0; a < boardsize - numberpos[orient]; a++)
         {
-            cout << endl << "a " << a << endl;
             if (orient == 0)
             {
                 if ((boardd[numberpos[0] + a][numberpos[1]] == '1' || boardd[numberpos[0] + a][numberpos[1]] == '2' || boardd[numberpos[0] + a][numberpos[1]] == '4') && a < maxrange)
@@ -252,7 +309,7 @@ public:
                 }
             }
         }
-        cout << endl << maxrange << endl;
+        cout << endl << "Max Range: " << maxrange << endl;
         for (int i=0 ; i < pwsize; i++)
         {
             if (possible_words[i].size() <= maxrange)
@@ -452,31 +509,82 @@ private:
 
 };
 
-int main()
-{
-    vector <string> possible_words;
-    vector <int> npos(2, 0);
+int main() {
+    int mode = 1;
+    bool end = false;
+    string rr;
+    vector<string> possible_words;
+    vector<int> npos(2, 0);
 
-    vector <vector<char>> boardd;
+    vector<vector<char>> boardd;
     int boardsize = 0;
     Board board;
-    board.PickSize(boardsize);
+
     board.GetWords(possible_words, boardd);
 
-
-    cout << " ";
-    for (int i = 0; i < boardsize; i++)                                 // output lower letters column
-        cout << lower_letters[i] << "  ";
-    cout << endl;
-    for (int i = 0; i < boardsize; i++)                                 // output upper letters column
-        cout << upper_letters[i] << endl;
-
-    vector <char> line(boardsize, '0');
-
-    for (int i = 0; i < boardsize; i++)
+    while (!end) 
     {
-        boardd.push_back(line);
-    }
 
-    board.Coordinates(lower_letters, upper_letters,boardd, boardsize, npos, possible_words);
+        board.PickSize(boardsize);
+        vector<char> line(boardsize, '0');
+
+        for (int i = 0; i < boardsize; i++) {
+            boardd.push_back(line);
+        }
+
+        cout << endl << "Modes: " << endl << endl << "O -> Exit" << endl
+             << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Totally Random Board" << endl;
+        cout << "Choose the mode of Board Building (Input one of the numbers above): ";
+        while (1) {
+            cin >> mode;
+            if (cin.fail() || mode < 0 || mode > 2) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << endl << "Invalid Mode!" << endl;
+                cout << endl << "Modes: " << endl << endl << "O -> Exit" << endl
+                     << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Totally Random Board"
+                     << endl;
+                cout << "Choose the mode of Board Building (Input one of the numbers above): ";
+            } else
+                break;
+        }
+
+        switch (mode) 
+        {
+            case 0: {
+                break;
+            }
+            case 1: {
+                board.Coordinates(lower_letters, upper_letters, boardd, boardsize, npos, possible_words);
+                break;
+            }
+            case 2: {
+                board.RandomBoard(boardsize, npos, boardd, possible_words);
+                break;
+            }
+        }
+        cout << "Do you want to make a different Board [Y for yes || N for no] ? ";
+        while(1)
+        {
+            cin >> rr;
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "Invalid Input!" << endl;
+                cout << "Do you want to make a different Board [Y for yes || N for no] ? ";
+            } 
+            else
+            {
+             board.Lowerstr(rr);
+             if (rr == "y")
+                break;
+             else
+             {
+                 end = true;
+                 break;
+             }
+            }
+        }
+    }
 }
