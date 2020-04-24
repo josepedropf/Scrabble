@@ -223,7 +223,7 @@ void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector
     else
     {
         int wwsize = 0, sectioni = 0;
-        while(1)
+        while(words_wrange.size() > 4)
         {
             wwsize = words_wrange.size() / 4;
             sectioni = rand() % 4;
@@ -276,7 +276,8 @@ void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector
             }
         }
     }
-
+    if (words_wrange.size() <= 4)
+        chword = "6";
     for (int i = 0; i < chword.size(); i++)
     {
         switch (orient)
@@ -433,7 +434,8 @@ void Board::Coordinates(vector <char> lower_letters, vector <char> upper_letters
 void Board::GetWords(vector <string> &possible_words, vector <vector<char>> boardd)
 {
     fstream wordfile;
-    wordfile.open("C:\\Users\\Utilizador\\Desktop\\WORDS.TXT");
+    wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
+    //wordfile.open("C:\\Users\\Utilizador\\Desktop\\WORDS.TXT");
     //wordfile.open("WORDS.TXT");
     string content;
 
@@ -466,7 +468,7 @@ void Board::DrawBoard(int boardsize, vector <vector<char>> boardd)
 void Board::DrawBoardClean(int boardsize,  vector <vector<char>> boardd)
 {
     char drawch = ' ';
-    cout << "   ";
+    cout << endl << "   ";
     for (int i = 0; i < boardsize; i++)
         cout << lower_letters[i] << "  ";
     cout << endl;
@@ -485,7 +487,7 @@ void Board::DrawBoardClean(int boardsize,  vector <vector<char>> boardd)
         }
         cout << endl;
     }
-    cout << endl;
+    cout << endl << endl;
 }
 
 void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> boardd, vector <string> possible_words)
@@ -493,7 +495,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
     int nwords = rand() % (2 * boardsize) + 4;
     cout << endl << "Number of Words: " << nwords << endl;
     bool validword = false;
-    int cl, cc;
+    int cl, cc, randomor;
     int counter = 0;
     for (int i = 0; i < nwords; i++)
     {
@@ -507,22 +509,27 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
             npos[1] = cc;
             if (ValidPos(npos, boardsize, boardd))
             {
-                if (ValidOrientation(npos, 0, boardsize, boardd))
+                randomor = rand() % 2;
+                if (ValidOrientation(npos, randomor, boardsize, boardd))
                 {
-                    WordPlacer(npos, 0, boardsize, possible_words, boardd);
+                    WordPlacer(npos, randomor, boardsize, possible_words, boardd);
                     validword = true;
                 }
-                else if (ValidOrientation(npos, 1, boardsize, boardd))
+                if (randomor == 0)
+                    randomor = 1;
+                else
+                    randomor = 0;
+                if (ValidOrientation(npos, randomor, boardsize, boardd))
                 {
-                    WordPlacer(npos, 1, boardsize, possible_words, boardd);
+                    WordPlacer(npos, randomor, boardsize, possible_words, boardd);
                     validword = true;
                 }
             }
             if (counter > 10000)
                 validword = true;
         }
+        DrawBoardClean(boardsize, boardd);
     }
-    DrawBoardClean(boardsize, boardd);
 }
 
 int main()
