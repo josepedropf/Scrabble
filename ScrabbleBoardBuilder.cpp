@@ -112,19 +112,44 @@ bool Board::ValidPos(vector <int> numberpos, int bsize, vector <vector<char>> bo
 
 void Board::PickSize(int &boardsize)
 {
-    cout << "Select the board size (Length of the size of the square): ";
+    string rdecision = "N";
+    cout << "Do you want a random board size? [Y for yes || N for no] ";
     while(1)
     {
-        cin >> boardsize;
-        if (cin.fail() || boardsize < 1 || boardsize > 20)
+        cin >> rdecision;
+        if (cin.fail())
         {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "Invalid board size (Input a number between 1 and 20)" << endl;
-            cout << "Select the board size (Length of the size of the square): ";
+            cout << "Invalid Input!" << endl;
+            cout << "Do you want a random board size? [Y for yes || N for no] ";
         }
         else
             break;
+    }
+    Lowerstr(rdecision);
+
+    if (rdecision == "y")
+    {
+        boardsize = rand() % 17 + 4;
+        cout << "Board Size: " << boardsize << endl;
+    }
+    else
+    {
+        cout << "Select the board size [4 to 20] (Length of the size of the square): ";
+        while(1)
+        {
+            cin >> boardsize;
+            if (cin.fail() || boardsize < 4 || boardsize > 20)
+            {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "Invalid board size (Input a number between 4 and 20)" << endl;
+                cout << "Select the board size (Length of the size of the square): ";
+            }
+            else
+                break;
+        }
     }
 }
 
@@ -164,7 +189,6 @@ void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector
     int pwsize = possible_words.size();
     for (int a = 0; a < boardsize - numberpos[orient]; a++)
     {
-        cout << endl << "a " << a << endl;
         if (orient == 0)
         {
             if ((boardd[numberpos[0] + a][numberpos[1]] == '1' || boardd[numberpos[0] + a][numberpos[1]] == '2' || boardd[numberpos[0] + a][numberpos[1]] == '4') && a < maxrange)
@@ -180,7 +204,7 @@ void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector
             }
         }
     }
-    cout << endl << maxrange << endl;
+    cout << endl << "Max Range: " << maxrange << endl;
     for (int i=0 ; i < pwsize; i++)
     {
         if (possible_words[i].size() <= maxrange)
@@ -470,11 +494,13 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
     cout << endl << "Number of Words: " << nwords << endl;
     bool validword = false;
     int cl, cc;
+    int counter = 0;
     for (int i = 0; i < nwords; i++)
     {
         validword = false;
         while (!validword)
         {
+            counter++;
             cl = rand() % boardsize;
             cc = rand() % boardsize;
             npos[0] = cl;
@@ -492,12 +518,15 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
                     validword = true;
                 }
             }
+            if (counter > 10000)
+                validword = true;
         }
     }
     DrawBoardClean(boardsize, boardd);
 }
 
-int main() {
+int main()
+{
     int mode = 1;
     bool end = false;
     string rr;
