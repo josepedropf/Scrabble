@@ -82,7 +82,7 @@ public:
 
     bool ValidPos(vector <int> numberpos, int bsize, vector <vector<char>> boardd)
     {
-        if (numberpos[0] < bsize && numberpos[1] < bsize && boardd[numberpos[0]][numberpos[1]] == '0')
+        if (numberpos[0] < bsize && numberpos[1] < bsize && boardd[numberpos[0]][numberpos[1]] != '1' && boardd[numberpos[0]][numberpos[1]] != '2' && boardd[numberpos[0]][numberpos[1]] != '3')
             return true;
         else
             return false;
@@ -357,7 +357,8 @@ public:
                 {
                     if (numberpos[1] < boardsize - 1)
                     {
-                        boardd[numberpos[0] + i][numberpos[1] + 1] = '2';
+                        if (!IsLetter(boardd[numberpos[0] + i][numberpos[1] + 1]))
+                            boardd[numberpos[0] + i][numberpos[1] + 1] = '2';
                     }
                     if (numberpos[1] > 0)
                     {
@@ -383,6 +384,7 @@ public:
                 {
                     if (numberpos[0] < boardsize - 1)
                     {
+                        if (!IsLetter(boardd[numberpos[0] + 1][numberpos[1] + i]))
                         boardd[numberpos[0] + 1][numberpos[1] + i] = '3';
                     }
                     if (numberpos[0] > 0)
@@ -477,5 +479,4 @@ int main()
     }
 
     board.Coordinates(lower_letters, upper_letters,boardd, boardsize, npos, possible_words);
-
 }
