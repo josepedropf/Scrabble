@@ -130,44 +130,30 @@ bool Board:: EmptySpot(vector <vector<char>> boardd, int boardsize)
 
 void Board::PickSize(int &boardsize)
 {
-    string rdecision = "N";
-    cout << "Do you want a random board size? [Y for yes || N for no] ";
+    int decision = 0;
+    cout << "Select the board size [4 to 20] (Length of the size of the square) or input 0 for a random size: ";
     while(1)
     {
-        cin >> rdecision;
+        cin >> decision;
         if (cin.fail())
         {
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "Invalid Input!" << endl;
-            cout << "Do you want a random board size? [Y for yes || N for no] ";
+            cout << "Select the board size [4 to 20] (Length of the size of the square) or input 0 for a random size: ";
         }
         else
             break;
     }
-    Lowerstr(rdecision);
 
-    if (rdecision == "y")
+    if (decision == 0)
     {
         boardsize = rand() % 17 + 4;
         cout << "Board Size: " << boardsize << endl;
     }
     else
     {
-        cout << "Select the board size [4 to 20] (Length of the size of the square): ";
-        while(1)
-        {
-            cin >> boardsize;
-            if (cin.fail() || boardsize < 4 || boardsize > 20)
-            {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "Invalid board size (Input a number between 4 and 20)" << endl;
-                cout << "Select the board size (Length of the size of the square): ";
-            }
-            else
-                break;
-        }
+        boardsize = decision;
     }
 }
 
