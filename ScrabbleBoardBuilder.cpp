@@ -223,7 +223,7 @@ bool Board::ValidWord(vector <int> numberpos, int orient, int boardsize, vector 
     return true;
 }
 
-int Board:: WordsRange(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words, vector <vector<char>> boardd, vector <string> &wordsrange)
+int Board::WordsRange(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words, vector <vector<char>> boardd, vector <string> &wordsrange)
 {
     int maxrange = boardsize - numberpos[orient];
     cout << endl << "bs: " << boardsize << endl;
