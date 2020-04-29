@@ -126,7 +126,7 @@ bool Board::ValidPos(vector <int> numberpos, int bsize, vector <vector<char>> bo
         return false;
 }
 
-bool Board:: EmptySpot(vector <vector<char>> boardd, int boardsize)
+bool Board::EmptySpot(vector <vector<char>> boardd, int boardsize)
 {
     for (int i = 0; i < boardsize; i++)
     {
