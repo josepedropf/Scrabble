@@ -45,7 +45,7 @@ public:
     bool EmptySpot(vector <vector<char>> boardd, int boardsize);
     void GetWords(vector <string> &possible_words, vector <vector<char>> boardd);
     void Coordinates(vector <char> lower_letters, vector <char> upper_letters, vector <vector<char>> boardd,
-            int boardsize, vector <int> npos, vector <string> possible_words);
+            int boardsize, vector <int> npos, vector <string> possible_words, int mode);
     int WordsRange(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
             vector <vector<char>> boardd, vector <string> &wordsrange);
     bool ValidOrientation(vector <int> numberpos, int n_orient, int boardsize, vector <vector<char>> boardd);
@@ -56,7 +56,10 @@ public:
                          vector<vector<char>> &boardd);
     void WordPlacer(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
             vector <vector<char>> &boardd, string chword);
-    void RandomWordPlacement(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words, vector <vector<char>> &boardd);
+    void RandomWordPlacement(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
+            vector <vector<char>> &boardd);
+    void PlayerWord(vector <int> numberpos, int orient, int boardsize,vector <string> possible_words,
+            vector <vector<char>> &boardd);
     void DrawBoard(int boardsize, vector <vector<char>> boardd);
     void DrawBoardClean(int boardsize,  vector <vector<char>> boardd);
     void RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> boardd, vector <string> possible_words);
@@ -331,6 +334,7 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
 void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
         vector <vector<char>> &boardd, string chword)
 {
+    cout << endl << "HERE     " << chword << endl;
     for (int i = 0; i < chword.size(); i++)
     {
         switch (orient)
@@ -414,16 +418,72 @@ void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector
     }
 }
 
-void Board::RandomWordPlacement(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words, vector <vector<char>> &boardd)
+void Board::RandomWordPlacement(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
+        vector <vector<char>> &boardd)
 {
     string chosenw;
     chosenw = GetRandomWord(numberpos, orient, boardsize, possible_words, boardd);
     WordPlacer(numberpos, orient, boardsize, possible_words, boardd, chosenw);
 }
 
-void Board::Coordinates(vector <char> lower_letters, vector <char> upper_letters, vector <vector<char>> boardd,
-        int boardsize, vector <int> npos, vector <string> possible_words)
+void Board::PlayerWord(vector <int> numberpos, int orient, int boardsize,vector <string> possible_words,
+        vector <vector<char>> &boardd)
 {
+    string playerw, keepdec;
+    vector <string> worange;
+    cout << endl << "Please Introduce a Word (maximum number of letters: " <<
+    WordsRange(numberpos, orient, boardsize, possible_words, boardd, worange) << ") -> " ;
+    while(1)
+    {
+        cin >> playerw;
+        if (cin.fail() || playerw.size() == 0
+        || playerw.size() > WordsRange(numberpos, orient, boardsize, possible_words, boardd, worange)
+        || !ValidWord(numberpos, orient, boardsize, boardd, playerw))
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << endl << "Invalid Word" << endl;
+            cout << "Do you want to keep the same coordinates and orientation ? [Y for yes || N for no] ";
+            while(1)
+            {
+                cin >> keepdec;
+                if (cin.fail())
+                {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << endl << "Invalid Input!" << endl;
+                    cout << "Do you want to keep the same coordinates and orientation ? [Y for yes || N for no] ";
+                }
+                else
+                    break;
+            }
+            Lowerstr(keepdec);
+            if (keepdec == "y")
+            {
+                break;
+            }
+            else
+            {
+                cout << endl << "Please Introduce a Word (maximum number of letters: " <<
+                     WordsRange(numberpos, orient, boardsize, possible_words, boardd, worange) << ") -> " ;
+            }
+        }
+        else
+        {
+            WordPlacer(numberpos, orient, boardsize, possible_words, boardd, playerw);
+            cin.clear();
+            cin.ignore(1000, '\n');
+            break;
+        }
+    }
+
+
+}
+
+void Board::Coordinates(vector <char> lower_letters, vector <char> upper_letters, vector <vector<char>> boardd,
+        int boardsize, vector <int> npos, vector <string> possible_words, int mode)
+{
+    pos = " ";
     while (pos != "end" || (pos == "end" && empty_board))
     {
         DrawBoardClean(boardsize, boardd);
@@ -494,7 +554,7 @@ void Board::Coordinates(vector <char> lower_letters, vector <char> upper_letters
                         cout << endl << "The orientation is Invalid for the position you chose previously!" << endl;
                         break;
                     }
-                    else if (!AtLeastOneWord(npos, numborient, boardsize, possible_words, boardd))
+                    else if (mode != 3 && !AtLeastOneWord(npos, numborient, boardsize, possible_words, boardd))
                     {
                         cin.clear();
                         cin.ignore(1000, '\n');
@@ -504,8 +564,16 @@ void Board::Coordinates(vector <char> lower_letters, vector <char> upper_letters
                     }
                     else
                     {
-                        RandomWordPlacement(npos, numborient, boardsize, possible_words, boardd);
-                        break;
+                        if (mode == 1)
+                        {
+                            RandomWordPlacement(npos, numborient, boardsize, possible_words, boardd);
+                            break;
+                        }
+                        if (mode == 3)
+                        {
+                            PlayerWord(npos, numborient, boardsize, possible_words, boardd);
+                            break;
+                        }
                     }
                 }
             }
@@ -513,6 +581,8 @@ void Board::Coordinates(vector <char> lower_letters, vector <char> upper_letters
     }
     cout << endl << "Board Done" << endl;
 }
+
+
 
 void Board::GetWords(vector <string> &possible_words, vector <vector<char>> boardd)
 {
@@ -685,7 +755,7 @@ int main()
         cout << "Choose the mode of Board Building (Input one of the numbers above): ";
         while (1) {
             cin >> mode;
-            if (cin.fail() || mode < 0 || mode > 2)
+            if (cin.fail() || mode < 0 || mode > 3)
             {
                 cin.clear();
                 cin.ignore(1000, '\n');
@@ -701,15 +771,19 @@ int main()
 
         switch (mode)
         {
-            case 0: {
+            case 0:{
                 break;
             }
             case 1: {
-                board.Coordinates(lower_letters, upper_letters, boardd, boardsize, npos, possible_words);
+                board.Coordinates(lower_letters, upper_letters, boardd, boardsize, npos, possible_words, mode);
                 break;
             }
             case 2: {
                 board.RandomBoard(boardsize, npos, boardd, possible_words);
+                break;
+            }
+            case 3:{
+                board.Coordinates(lower_letters, upper_letters, boardd, boardsize, npos, possible_words, mode);
                 break;
             }
         }
