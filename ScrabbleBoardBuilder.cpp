@@ -334,7 +334,6 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
 void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
         vector <vector<char>> &boardd, string chword)
 {
-    cout << endl << "HERE     " << chword << endl;
     for (int i = 0; i < chword.size(); i++)
     {
         switch (orient)
@@ -751,7 +750,8 @@ int main()
         board.DrawBoard(boardsize, boardd);
 
         cout << endl << "Modes: " << endl << endl << "O -> Exit" << endl
-             << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Totally Random Board" << endl;
+             << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Totally Random Board" << endl
+             << "3 -> Choose the initial Coordinates and the Words" << endl;
         cout << "Choose the mode of Board Building (Input one of the numbers above): ";
         while (1) {
             cin >> mode;
@@ -761,8 +761,8 @@ int main()
                 cin.ignore(1000, '\n');
                 cout << endl << "Invalid Mode!" << endl;
                 cout << endl << "Modes: " << endl << endl << "O -> Exit" << endl
-                     << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Totally Random Board"
-                     << endl;
+                     << "1 -> Choose the initial Coordinates for Random Words" << endl << "2 -> Totally Random Board"
+                     << endl << "3 -> Choose the initial Coordinates and the Words" << endl;
                 cout << "Choose the mode of Board Building (Input one of the numbers above): ";
             }
             else
