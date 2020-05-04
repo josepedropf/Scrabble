@@ -1,10 +1,7 @@
-//
-// Created by Fred on 04/05/2020.
-//
-
 #include "Board.h"
 #include <iostream>
 #include <fstream>
+#include <ctime>
 using namespace std;
 
 bool Board::IsLetter(char ch)
@@ -95,6 +92,7 @@ void Board::PickSize(int &boardsize)
 
     if (decision == 0)
     {
+        srand(time(0));
         boardsize = rand() % 17 + 4;
         cout << endl << "Board Size: " << boardsize << endl;
     }
@@ -186,7 +184,8 @@ int Board::WordsRange(vector <int> numberpos, int orient, int boardsize, vector 
         for (int a = 0; a < boardsize - numberpos[0]; a++)
         {
             if (a < maxrange && (gameboard[numberpos[0] + a][numberpos[1]] == '1'
-                                 || gameboard[numberpos[0] + a][numberpos[1]] == '2' || gameboard[numberpos[0] + a][numberpos[1]] == '4'))
+                                 || gameboard[numberpos[0] + a][numberpos[1]] == '2' ||
+                                 gameboard[numberpos[0] + a][numberpos[1]] == '4'))
             {
                 maxrange = a;
             }
@@ -197,7 +196,8 @@ int Board::WordsRange(vector <int> numberpos, int orient, int boardsize, vector 
         for (int b = 0; b < boardsize - numberpos[1]; b++)
         {
             if (b < maxrange && (gameboard[numberpos[0]][numberpos[1] + b] == '1'
-                                 || gameboard[numberpos[0]][numberpos[1] + b] == '3' || gameboard[numberpos[0]][numberpos[1] + b] == '5'))
+                                 || gameboard[numberpos[0]][numberpos[1] + b] == '3' ||
+                                 gameboard[numberpos[0]][numberpos[1] + b] == '5'))
             {
                 maxrange = b;
             }
@@ -242,13 +242,18 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
     maxrange = WordsRange(numberpos, orient, boardsize, possible_words, gameboard, words_wrange);
 
     int rletter = 0;
-    if (maxrange == 1) {
+    if (maxrange == 1)
+    {
+        srand(time(0));
         rletter = rand() % 26;
         chword = lower_letters[rletter];
-    } else {
+    }
+    else
+        {
         int wwsize = 0, sectioni = 0;
         while (words_wrange.size() > 4) {
             wwsize = words_wrange.size() / 4;
+            srand(time(0));
             sectioni = rand() % 4;
             word_index = rand() % wwsize + (sectioni * wwsize);
             cout << word_index << endl;
@@ -268,6 +273,7 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
 void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
                        vector <vector<char>> &gameboard, string chword)
 {
+    Upperstr(chword);
     if (orient == 0)
         chorient.push_back('V');
     if (orient == 1)
@@ -424,7 +430,7 @@ void Board::PlayerWord(vector <int> numberpos, int orient, int boardsize,vector 
 
 }
 
-void Board::Coordinates(vector <vector<char>> gameboard,
+void Board::Coordinates(vector <vector<char>> &gameboard,
                         int boardsize, vector <int> npos, vector <string> possible_words, int mode)
 {
     pos = " ";
@@ -531,8 +537,8 @@ void Board::Coordinates(vector <vector<char>> gameboard,
 void Board::GetWords(vector <string> &possible_words, vector <vector<char>> gameboard)
 {
     fstream wordfile;
-    wordfile.open("C:\\Users\\Utilizador\\Desktop\\WORDS.TXT");
     //wordfile.open("C:\\Users\\Utilizador\\Desktop\\WORDS.TXT");
+    wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
     //wordfile.open("WORDS.TXT");
     string content;
 
@@ -584,7 +590,7 @@ void Board::DrawBoardClean(int boardsize,  vector <vector<char>> gameboard)
     cout << endl << endl;
 }
 
-void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> gameboard, vector <string> possible_words)
+void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> &gameboard, vector <string> possible_words)
 {
     int nwords = 1;
     cout << "Select the number of words [4 to " << (2 * boardsize) + 3 << "] or input 0 for a random size: ";
@@ -604,6 +610,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
 
     if (nwords == 0)
     {
+        srand(time(0));
         nwords = rand() % (2 * boardsize) + 4;
         cout << endl << "Number of Words: " << nwords << endl;
     }
@@ -622,6 +629,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
                 validword = true;
                 counter = 0;
             }
+            srand(time(0));
             cl = rand() % boardsize;
             cc = rand() % boardsize;
             npos[0] = cl;
@@ -630,6 +638,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
             counter++;
             if (ValidPos(npos, boardsize, gameboard))
             {
+                srand(time(0));
                 randomor = rand() % 2;
                 cout << endl << randomor << endl;
                 if (ValidOrientation(npos, randomor, boardsize, gameboard))
@@ -658,6 +667,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
         }
         DrawBoardClean(boardsize, gameboard);
     }
+    DrawBoardClean(boardsize, gameboard);
 }
 
 void Board::FormatFile(int boardsize, string filename, vector<vector<char>> gameboard)
@@ -682,7 +692,6 @@ void Board::FormatFile(int boardsize, string filename, vector<vector<char>> game
         for (int b = 0; b < boardsize; b++)
         {
             drawch = ' ';
-            cout << gameboard[a][b] << endl;
             if (IsLetter(gameboard[a][b]))
                 drawch = gameboard[a][b];
             boardfile << drawch << "  ";
