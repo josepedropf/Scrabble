@@ -1,11 +1,10 @@
-//
-// Created by Fred on 04/05/2020.
-//
 #include <string>
 #include <vector>
 using namespace std;
 #ifndef SCRABBLEBOARDBUILDER_BOARD_H
 #define SCRABBLEBOARDBUILDER_BOARD_H
+//#ifndef BOARDBUILDER_BOARD_H
+//#define BOARDBUILDER_BOARD_H
 
 
 class Board {
@@ -58,3 +57,4 @@ private:
 
 
 #endif //SCRABBLEBOARDBUILDER_BOARD_H
+//#endif //BOARDBUILDER_BOARD_H
