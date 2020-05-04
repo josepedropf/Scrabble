@@ -22,7 +22,7 @@ public:
     void PickSize(int &boardsize);
     bool EmptySpot(vector <vector<char>> gameboard, int boardsize);
     void GetWords(vector <string> &possible_words, vector <vector<char>> gameboard);
-    void Coordinates(vector <vector<char>> gameboard, int boardsize, vector <int> npos, vector <string> possible_words, 
+    void Coordinates(vector <vector<char>> &gameboard, int boardsize, vector <int> npos, vector <string> possible_words, 
                      int mode);
     int WordsRange(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
                    vector <vector<char>> gameboard, vector <string> &wordsrange);
@@ -40,7 +40,7 @@ public:
                     vector <vector<char>> &gameboard);
     void DrawBoard(int boardsize, vector <vector<char>> gameboard);
     void DrawBoardClean(int boardsize,  vector <vector<char>> gameboard);
-    void RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> gameboard, vector <string> possible_words);
+    void RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> &gameboard, vector <string> possible_words);
     void FormatFile(int boardsize, string filename, vector<vector<char>> gameboard);
 
 
