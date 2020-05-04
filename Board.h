@@ -19,30 +19,30 @@ public:
     void Upperstr(string &astring);
     bool IsLetter(char ch);
     void Letter_to_Int_Pos(vector <int> &numberpos, string normalpos);
-    bool ValidPos(vector <int> numberpos, int bsize, vector <vector<char>> boardd);
+    bool ValidPos(vector <int> numberpos, int bsize, vector <vector<char>> gameboard);
     void PickSize(int &boardsize);
-    bool EmptySpot(vector <vector<char>> boardd, int boardsize);
-    void GetWords(vector <string> &possible_words, vector <vector<char>> boardd);
-    void Coordinates(vector <vector<char>> boardd, int boardsize, vector <int> npos, vector <string> possible_words
+    bool EmptySpot(vector <vector<char>> gameboard, int boardsize);
+    void GetWords(vector <string> &possible_words, vector <vector<char>> gameboard);
+    void Coordinates(vector <vector<char>> gameboard, int boardsize, vector <int> npos, vector <string> possible_words
             , int mode);
     int WordsRange(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-                   vector <vector<char>> boardd, vector <string> &wordsrange);
-    bool ValidOrientation(vector <int> numberpos, int n_orient, int boardsize, vector <vector<char>> boardd);
-    bool ValidWord(vector <int> numberpos, int orient, int boardsize, vector <vector<char>> boardd, string chosenword);
+                   vector <vector<char>> gameboard, vector <string> &wordsrange);
+    bool ValidOrientation(vector <int> numberpos, int n_orient, int boardsize, vector <vector<char>> gameboard);
+    bool ValidWord(vector <int> numberpos, int orient, int boardsize, vector <vector<char>> gameboard, string chosenword);
     bool AtLeastOneWord(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-                        vector <vector<char>> boardd);
+                        vector <vector<char>> gameboard);
     string GetRandomWord(vector<int> numberpos, int orient, int boardsize, vector<string> possible_words,
-                         vector<vector<char>> &boardd);
+                         vector<vector<char>> &gameboard);
     void WordPlacer(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-                    vector <vector<char>> &boardd, string chword);
+                    vector <vector<char>> &gameboard, string chword);
     void RandomWordPlacement(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-                             vector <vector<char>> &boardd);
+                             vector <vector<char>> &gameboard);
     void PlayerWord(vector <int> numberpos, int orient, int boardsize,vector <string> possible_words,
-                    vector <vector<char>> &boardd);
-    void DrawBoard(int boardsize, vector <vector<char>> boardd);
-    void DrawBoardClean(int boardsize,  vector <vector<char>> boardd);
-    void RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> boardd, vector <string> possible_words);
-    void FormatFile(int boardsize, string filename, vector<vector<char>> boardd);
+                    vector <vector<char>> &gameboard);
+    void DrawBoard(int boardsize, vector <vector<char>> gameboard);
+    void DrawBoardClean(int boardsize,  vector <vector<char>> gameboard);
+    void RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> gameboard, vector <string> possible_words);
+    void FormatFile(int boardsize, string filename, vector<vector<char>> gameboard);
 
 
 private:
