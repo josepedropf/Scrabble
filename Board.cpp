@@ -137,6 +137,7 @@ bool Board::ValidOrientation(vector <int> numberpos, int n_orient, int boardsize
 bool Board::ValidWord(vector <int> numberpos, int orient, int boardsize, vector <vector<char>> gameboard,
                       string chosenword)
 {
+    Upperstr(chosenword);
     for (int i = 0; i < chosenword.size(); i++)
     {
         switch (orient)
