@@ -11,11 +11,11 @@ int main() {
     string savefile;
     vector<string> possible_words;
     vector<int> npos(2, 0);
-    vector<vector<char>> boardd;
+    vector<vector<char>> gameboard;
     int boardsize = 0;
     Board board;
 
-    board.GetWords(possible_words, boardd);
+    board.GetWords(possible_words, gameboard);
 
     while (!end)
     {
@@ -23,7 +23,7 @@ int main() {
         board.PickSize(boardsize);
         vector<char> line;
         line.clear();
-        boardd.clear();
+        gameboard.clear();
 
         for (int i = 0; i < boardsize; i++)
         {
@@ -32,10 +32,10 @@ int main() {
 
         for (int i = 0; i < boardsize; i++)
         {
-            boardd.push_back(line);
+            gameboard.push_back(line);
         }
 
-        board.DrawBoard(boardsize, boardd);
+        board.DrawBoard(boardsize, gameboard);
 
         cout << endl << "Modes: " << endl << endl << "O -> Exit" << endl
              << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Totally Random Board" << endl
@@ -64,15 +64,15 @@ int main() {
                 break;
             }
             case 1: {
-                board.Coordinates(boardd, boardsize, npos, possible_words, mode);
+                board.Coordinates(gameboard, boardsize, npos, possible_words, mode);
                 break;
             }
             case 2: {
-                board.RandomBoard(boardsize, npos, boardd, possible_words);
+                board.RandomBoard(boardsize, npos, gameboard, possible_words);
                 break;
             }
             case 3:{
-                board.Coordinates(boardd, boardsize, npos, possible_words, mode);
+                board.Coordinates(gameboard, boardsize, npos, possible_words, mode);
                 break;
             }
         }
@@ -106,7 +106,7 @@ int main() {
                         }
                         else
                         {
-                            board.FormatFile(boardsize, filename, boardd);
+                            board.FormatFile(boardsize, filename, gameboard);
                             break;
                         }
                     }
