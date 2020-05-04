@@ -23,8 +23,8 @@ public:
     void PickSize(int &boardsize);
     bool EmptySpot(vector <vector<char>> gameboard, int boardsize);
     void GetWords(vector <string> &possible_words, vector <vector<char>> gameboard);
-    void Coordinates(vector <vector<char>> gameboard, int boardsize, vector <int> npos, vector <string> possible_words
-            , int mode);
+    void Coordinates(vector <vector<char>> gameboard, int boardsize, vector <int> npos, vector <string> possible_words, 
+                     int mode);
     int WordsRange(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
                    vector <vector<char>> gameboard, vector <string> &wordsrange);
     bool ValidOrientation(vector <int> numberpos, int n_orient, int boardsize, vector <vector<char>> gameboard);
