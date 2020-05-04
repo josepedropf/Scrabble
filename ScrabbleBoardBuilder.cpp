@@ -45,7 +45,8 @@ public:
     bool EmptySpot(vector <vector<char>> boardd, int boardsize);
     void GetWords(vector <string> &possible_words, vector <vector<char>> boardd);
     void Coordinates(vector <char> lower_letters, vector <char> upper_letters, vector <vector<char>> boardd,
-            int boardsize, vector <int> npos, vector <string> possible_words, int mode);
+                     int boardsize, vector <int> npos, vector <string> possible_words, int mode,
+                     vector <char> chorient, vector <string> strcoord, vector <string> wordlist);
     int WordsRange(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
             vector <vector<char>> boardd, vector <string> &wordsrange);
     bool ValidOrientation(vector <int> numberpos, int n_orient, int boardsize, vector <vector<char>> boardd);
@@ -55,14 +56,20 @@ public:
     string GetRandomWord(vector<int> numberpos, int orient, int boardsize, vector<string> possible_words,
                          vector<vector<char>> &boardd);
     void WordPlacer(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-            vector <vector<char>> &boardd, string chword);
+                    vector <vector<char>> &boardd, string chword, vector <char> &chorient, vector <string> &strcoord,
+                    vector <string> &wordlist);
     void RandomWordPlacement(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-            vector <vector<char>> &boardd);
+                             vector <vector<char>> &boardd, vector <char> &chorient,
+                             vector <string> &strcoord, vector <string> &wordlist);
     void PlayerWord(vector <int> numberpos, int orient, int boardsize,vector <string> possible_words,
-            vector <vector<char>> &boardd);
+                    vector <vector<char>> &boardd, vector <char> &chorient, vector <string> &strcoord,
+                    vector <string> &wordlist);
     void DrawBoard(int boardsize, vector <vector<char>> boardd);
     void DrawBoardClean(int boardsize,  vector <vector<char>> boardd);
-    void RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> boardd, vector <string> possible_words);
+    void RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> boardd, vector <string> possible_words,
+                     vector <char> &chorient, vector <string> &strcoord, vector <string> &wordlist);
+    void FormatFile(int boardsize, vector <char> chorient, vector <string> strcoord, vector <string> wordlist,
+                    string filename, vector<vector<char>> boardd);
 
 private:
     bool empty_board = true;
@@ -126,7 +133,7 @@ bool Board::ValidPos(vector <int> numberpos, int bsize, vector <vector<char>> bo
         return false;
 }
 
-bool Board::EmptySpot(vector <vector<char>> boardd, int boardsize)
+bool Board:: EmptySpot(vector <vector<char>> boardd, int boardsize)
 {
     for (int i = 0; i < boardsize; i++)
     {
@@ -332,8 +339,19 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
 }
 
 void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-        vector <vector<char>> &boardd, string chword)
+        vector <vector<char>> &boardd, string chword, vector <char> &chorient, vector <string> &strcoord,
+        vector <string> &wordlist)
 {
+    if (orient == 0)
+        chorient.push_back('V');
+    if (orient == 1)
+        chorient.push_back('H');
+    string position = "Aa";
+    position[0] = upper_letters[numberpos[0]];
+    position[1] = lower_letters[numberpos[1]];
+    strcoord.push_back(position);
+    Upperstr(chword);
+    wordlist.push_back(chword);
     for (int i = 0; i < chword.size(); i++)
     {
         switch (orient)
@@ -418,15 +436,15 @@ void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector
 }
 
 void Board::RandomWordPlacement(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-        vector <vector<char>> &boardd)
+        vector <vector<char>> &boardd, vector <char> &chorient, vector <string> &strcoord, vector <string> &wordlist)
 {
     string chosenw;
     chosenw = GetRandomWord(numberpos, orient, boardsize, possible_words, boardd);
-    WordPlacer(numberpos, orient, boardsize, possible_words, boardd, chosenw);
+    WordPlacer(numberpos, orient, boardsize, possible_words, boardd, chosenw, chorient, strcoord, wordlist);
 }
 
 void Board::PlayerWord(vector <int> numberpos, int orient, int boardsize,vector <string> possible_words,
-        vector <vector<char>> &boardd)
+        vector <vector<char>> &boardd, vector <char> &chorient, vector <string> &strcoord, vector <string> &wordlist)
 {
     string playerw, keepdec;
     vector <string> worange;
@@ -469,7 +487,7 @@ void Board::PlayerWord(vector <int> numberpos, int orient, int boardsize,vector 
         }
         else
         {
-            WordPlacer(numberpos, orient, boardsize, possible_words, boardd, playerw);
+            WordPlacer(numberpos, orient, boardsize, possible_words, boardd, playerw, chorient, strcoord, wordlist);
             cin.clear();
             cin.ignore(1000, '\n');
             break;
@@ -480,7 +498,8 @@ void Board::PlayerWord(vector <int> numberpos, int orient, int boardsize,vector 
 }
 
 void Board::Coordinates(vector <char> lower_letters, vector <char> upper_letters, vector <vector<char>> boardd,
-        int boardsize, vector <int> npos, vector <string> possible_words, int mode)
+        int boardsize, vector <int> npos, vector <string> possible_words, int mode,
+        vector <char> chorient, vector <string> strcoord, vector <string> wordlist)
 {
     pos = " ";
     while (pos != "end" || (pos == "end" && empty_board))
@@ -565,12 +584,14 @@ void Board::Coordinates(vector <char> lower_letters, vector <char> upper_letters
                     {
                         if (mode == 1)
                         {
-                            RandomWordPlacement(npos, numborient, boardsize, possible_words, boardd);
+                            RandomWordPlacement(npos, numborient, boardsize, possible_words, boardd, chorient,
+                                    strcoord, wordlist);
                             break;
                         }
                         if (mode == 3)
                         {
-                            PlayerWord(npos, numborient, boardsize, possible_words, boardd);
+                            PlayerWord(npos, numborient, boardsize, possible_words, boardd, chorient,
+                                    strcoord, wordlist);
                             break;
                         }
                     }
@@ -639,7 +660,8 @@ void Board::DrawBoardClean(int boardsize,  vector <vector<char>> boardd)
     cout << endl << endl;
 }
 
-void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> boardd, vector <string> possible_words)
+void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> boardd, vector <string> possible_words,
+        vector <char> &chorient, vector <string> &strcoord, vector <string> &wordlist)
 {
     int nwords = 1;
     cout << "Select the number of words [4 to " << (2 * boardsize) + 3 << "] or input 0 for a random size: ";
@@ -691,7 +713,8 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
                 {
                     if (AtLeastOneWord(npos, randomor, boardsize, possible_words, boardd))
                     {
-                        RandomWordPlacement(npos, randomor, boardsize, possible_words, boardd);
+                        RandomWordPlacement(npos, randomor, boardsize, possible_words, boardd, chorient,
+                                strcoord, wordlist);
                         validword = true;
                     }
                 }
@@ -705,7 +728,8 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
                     if (ValidOrientation(npos, randomor, boardsize, boardd))
                     {
                         if (AtLeastOneWord(npos, randomor, boardsize, possible_words, boardd))
-                            RandomWordPlacement(npos, randomor, boardsize, possible_words, boardd);
+                            RandomWordPlacement(npos, randomor, boardsize, possible_words, boardd, chorient,
+                                    strcoord, wordlist);
                         validword = true;
                     }
                 }
@@ -715,15 +739,54 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
     }
 }
 
+void Board::FormatFile(int boardsize, vector <char> chorient, vector <string> strcoord, vector <string> wordlist,
+                       string filename, vector<vector<char>> boardd)
+{
+    string boardfilename = filename + ".txt";
+    ofstream boardfile(boardfilename);
+    boardfile << boardsize << " x " << boardsize << endl;
+    cout << boardd.size();
+    for (int i = 0; i < chorient.size(); i++)
+    {
+        boardfile << strcoord[i] << " " << chorient[i] << " " << wordlist[i] << endl;
+    }
+
+    char drawch = ' ';
+    boardfile << endl << "   ";
+    for (int i = 0; i < boardsize; i++)
+        boardfile << lower_letters[i] << "  ";
+    boardfile << endl;
+    for (int a = 0; a < boardsize; a++)
+    {
+        boardfile << upper_letters[a] << "  ";
+        for (int b = 0; b < boardsize; b++)
+        {
+            drawch = ' ';
+            cout << boardd[a][b] << endl;
+            if (IsLetter(boardd[a][b]))
+                drawch = boardd[a][b];
+            boardfile << drawch << "  ";
+        }
+        boardfile << endl;
+    }
+    boardfile << endl << endl;
+    boardfile.close();
+}
+
+
 int main()
 {
     int mode = 1;
     bool end = false;
     string rr;
+    string savefile;
     vector<string> possible_words;
     vector<int> npos(2, 0);
 
     vector<vector<char>> boardd;
+    vector <string> strcoord;
+    vector <char> chorient;
+    vector <string> wordlist;
     int boardsize = 0;
     Board board;
 
@@ -753,7 +816,8 @@ int main()
              << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Totally Random Board" << endl
              << "3 -> Choose the initial Coordinates and the Words" << endl;
         cout << "Choose the mode of Board Building (Input one of the numbers above): ";
-        while (1) {
+        while (1)
+        {
             cin >> mode;
             if (cin.fail() || mode < 0 || mode > 3)
             {
@@ -775,18 +839,61 @@ int main()
                 break;
             }
             case 1: {
-                board.Coordinates(lower_letters, upper_letters, boardd, boardsize, npos, possible_words, mode);
+                board.Coordinates(lower_letters, upper_letters, boardd, boardsize, npos, possible_words, mode,
+                        chorient, strcoord, wordlist);
                 break;
             }
             case 2: {
-                board.RandomBoard(boardsize, npos, boardd, possible_words);
+                board.RandomBoard(boardsize, npos, boardd, possible_words, chorient, strcoord, wordlist);
                 break;
             }
             case 3:{
-                board.Coordinates(lower_letters, upper_letters, boardd, boardsize, npos, possible_words, mode);
+                board.Coordinates(lower_letters, upper_letters, boardd, boardsize, npos, possible_words, mode,
+                chorient, strcoord, wordlist);
                 break;
             }
         }
+        cout << "Do you want to save the Board in a File [Y for yes || N for no] ? ";
+        while(1)
+        {
+            cin >> savefile;
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "Invalid Input!" << endl;
+                cout << "Do you want to save the Board in a File [Y for yes || N for no] ? ";
+            }
+            else
+                {
+                board.Lowerstr(savefile);
+                if (savefile == "y")
+                {
+                    string filename;
+                    cout << "Name of the File (without .txt) : ";
+                    while(1)
+                    {
+                        cin >> filename;
+                        if (cin.fail())
+                        {
+                            cin.clear();
+                            cin.ignore(1000, '\n');
+                            cout << "Invalid Input!" << endl;
+                            cout << "Name of the File (without .txt) : ";
+                        }
+                        else
+                        {
+                            board.FormatFile(boardsize, chorient, strcoord, wordlist, filename, boardd);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                else
+                    break;
+            }
+        }
+
         cout << "Do you want to make a different Board [Y for yes || N for no] ? ";
         while(1)
         {
