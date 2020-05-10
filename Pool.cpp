@@ -6,7 +6,7 @@
 #include <string>
 using namespace std;
 
-void Pool::InitialPool(vector<vector <char>> gameboard, int boardsize, vector <char> &pool)
+void Pool::InitialPool(vector<vector <char>> gameboard, int boardsize)
 {
     for (int i = 0; i < boardsize; i++)
     {
