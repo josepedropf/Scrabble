@@ -13,9 +13,9 @@ public:
     vector<vector <char>> gameboard;
     int boardsize = 0;
 
-    void OpenBoard(string filename, int &boardsize, vector<vector <char>> &gameboard);
+    void OpenBoard(string filename);
     // Make a Vector Board from a Board Text File
-    void DrawGameBoard(int boardsize,  vector <vector<char>> gameboard);
+    void DrawGameBoard();
     // Draws the Game Board
 };
 
