@@ -6,7 +6,7 @@
 #include <string>
 using namespace std;
 
-void ScrabbleBoard::OpenBoard(string filename, int &boardsize, vector<vector <char>> &gameboard)
+void ScrabbleBoard::OpenBoard(string filename)
 {
     gameboard.clear();
     vector <int> linepos;
@@ -87,7 +87,7 @@ void ScrabbleBoard::OpenBoard(string filename, int &boardsize, vector<vector <ch
     boardfile.close();
 }
 
-void ScrabbleBoard::DrawGameBoard(int boardsize,  vector <vector<char>> gameboard)
+void ScrabbleBoard::DrawGameBoard()
 {
     char drawch = ' ';
     cout << endl << "   ";
