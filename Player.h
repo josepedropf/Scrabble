@@ -5,7 +5,11 @@
 using namespace std;
 
 class Player {
+public:
+    void getPlayers();
 
+private:
+    int nplayers;
 };
 
 
