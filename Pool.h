@@ -7,8 +7,15 @@ using namespace std;
 class Pool {
 public:
     vector <char> pool;
+    vector <char> charp1;
+    vector <char> charp2;
+    vector <char> charp3;
+    vector <char> charp4;
+
     void InitialPool(vector<vector <char>> gameboard, int boardsize);
     // Gets the characters from the Game Board in order to make the initial letter pool
+    char DrawRandomChar();
+    void InitialDraw(int ndraw, int np);
 };
 
 
