@@ -6,10 +6,17 @@ using namespace std;
 
 class Player {
 public:
-    void getPlayers();
+    int nplayers;
+    string pname1 = "Player 1";
+    string pname2 = "Player 2";
+    string pname3 = "Player 3";
+    string pname4 = "Player 4";
+
+    void GetPlayers();
+    void CustomPlayerNames();
 
 private:
-    int nplayers;
+
 };
 
 
