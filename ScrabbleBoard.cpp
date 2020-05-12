@@ -1,10 +1,30 @@
 #include "ScrabbleBoard.h"
 #include <iostream>
 #include <fstream>
+#include <windows.h>
 #include <vector>
+#include <iomanip>
+#include <cstdlib>
 #include <ctime>
 #include <string>
 using namespace std;
+
+#define BLACK 0
+#define BLUE 1
+#define GREEN 2
+#define CYAN 3
+#define RED 4
+#define MAGENTA 5
+#define BROWN 6
+#define LIGHTGRAY 7
+#define DARKGRAY 8
+#define LIGHTBLUE 9
+#define LIGHTGREEN 10
+#define LIGHTCYAN 11
+#define LIGHTRED 12
+#define LIGHTMAGENTA 13
+#define YELLOW 14
+#define WHITE 15
 
 void ScrabbleBoard::OpenBoard(string filename)
 {
@@ -62,6 +82,7 @@ void ScrabbleBoard::OpenBoard(string filename)
     for (int i = 0; i < boardsize; i++)
     {
         gameboard.push_back(boardline);
+        playedl.push_back(boardline);
     }
 
     for (int i = 0; i < linepos.size(); i++)
@@ -72,12 +93,12 @@ void ScrabbleBoard::OpenBoard(string filename)
             switch (orient[i])
             {
                 case 0:
-                    {
+                {
                     gameboard[linepos[i] + a][colpos[i]] = wrd[a];
                     break;
                 }
                 case 1:
-                    {
+                {
                     gameboard[linepos[i]][colpos[i] + a] = wrd[a];
                     break;
                 }
@@ -87,8 +108,15 @@ void ScrabbleBoard::OpenBoard(string filename)
     boardfile.close();
 }
 
-void ScrabbleBoard::DrawGameBoard()
+void ScrabbleBoard::SetColor(unsigned int color)
 {
+    HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hcon, color);
+}
+
+void ScrabbleBoard::DrawGameBoard(unsigned int textcolor)
+{
+    unsigned int chcolor = textcolor;
     char drawch = ' ';
     cout << endl << "   ";
     for (int i = 0; i < boardsize; i++)
@@ -99,10 +127,12 @@ void ScrabbleBoard::DrawGameBoard()
         cout << upper_letters[a] << "  ";
         for (int b = 0; b < boardsize; b++)
         {
+            SetColor(chcolor);
             drawch = ' ';
             if (isalpha(gameboard[a][b]))
                 drawch = gameboard[a][b];
             cout << drawch << "  ";
+            SetColor(textcolor);
         }
         cout << endl;
     }
