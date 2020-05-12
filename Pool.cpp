@@ -22,3 +22,26 @@ void Pool::InitialPool(vector<vector <char>> gameboard, int boardsize)
     }
     cout << endl;
 }
+
+char Pool::DrawRandomChar()
+{
+    char pchar;
+    srand(time(0));
+    int poolindex = rand() % pool.size();
+    pchar = pool[poolindex];
+    pool.erase(pool.begin() + poolindex);
+    return pchar;
+}
+
+void Pool::InitialDraw(int ndraw, int np)
+{
+    for (int i = 0; i < ndraw; i++)
+    {
+        charp1.push_back(DrawRandomChar());
+        charp2.push_back(DrawRandomChar());
+        if (np >= 3)
+            charp3.push_back(DrawRandomChar());
+        if (np == 4)
+            charp4.push_back(DrawRandomChar());
+    }
+}
