@@ -15,9 +15,14 @@ public:
 
     void OpenBoard(string filename);
     // Make a Vector Board from a Board Text File
-    void DrawGameBoard();
+    void DrawGameBoard(unsigned int textcolor);
     // Draws the Game Board
+    void SetColor(unsigned int color);
+
+private:
+    vector<vector <char>> playedl;
 };
+
 
 
 #endif //SCRABBLEJUNIOR_SCRABBLEBOARD_H
