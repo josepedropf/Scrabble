@@ -26,6 +26,9 @@ using namespace std;
 #define YELLOW 14
 #define WHITE 15
 
+// 0 -> Vertical
+// 1 -> Horizontal
+
 void ScrabbleBoard::OpenBoard(string filename)
 {
     gameboard.clear();
@@ -36,7 +39,7 @@ void ScrabbleBoard::OpenBoard(string filename)
     vector <string> words;
     string word = "";
     ifstream boardfile;
-    string path = "C:\\Users\\MSI\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
+    string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
     string txtfilename = path + filename + ".txt";
     boardfile.open(txtfilename);
     string line;
@@ -127,6 +130,10 @@ void ScrabbleBoard::DrawGameBoard(unsigned int textcolor)
         cout << upper_letters[a] << "  ";
         for (int b = 0; b < boardsize; b++)
         {
+            if (playedl[a][b] == '1')
+                chcolor = 4;
+            else
+                chcolor = textcolor;
             SetColor(chcolor);
             drawch = ' ';
             if (isalpha(gameboard[a][b]))
@@ -137,4 +144,233 @@ void ScrabbleBoard::DrawGameBoard(unsigned int textcolor)
         cout << endl;
     }
     cout << endl << endl;
+}
+
+
+int ScrabbleBoard::WLeft(int line, int col)
+{
+    if (col != 0)
+    {
+        if (gameboard[line][col - 1] == '0')
+            return 0;
+        else if (playedl[line][col - 1] == '1')
+            return 2;
+        else
+            return 1;
+    }
+    else
+        return 0;
+}
+
+int ScrabbleBoard::WRight(int line, int col)
+{
+    if (col < boardsize - 1)
+    {
+        if (gameboard[line][col + 1] == '0')
+            return 0;
+        else if (playedl[line][col + 1] == '1')
+            return 2;
+        else
+            return 1;
+    }
+    else
+        return 0;
+}
+
+int ScrabbleBoard::WUp(int line, int col)
+{
+    if (line != 0)
+    {
+        if (gameboard[line - 1][col] == '0')
+            return 0;
+        else if (playedl[line - 1][col] == '1')
+            return 2;
+        else
+            return 1;
+    }
+    else
+        return 0;
+}
+
+int ScrabbleBoard::WDown(int line, int col)
+{
+    if (line < boardsize - 1)
+    {
+        if (gameboard[line + 1][col] == '0')
+            return 0;
+        else if (playedl[line + 1][col] == '1')
+            return 2;
+        else
+            return 1;
+    }
+    else
+        return 0;
+}
+
+bool ScrabbleBoard::IsolatedLetter(int line, int col)
+{
+    if (WLeft(line, col) + WRight(line, col) + WUp(line, col) + WDown(line, col) == 0)
+        return true;
+    return false;
+}
+
+
+bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
+{
+    if (isalpha(gameboard[line][col]) && playedl[line][col] != '1')
+    {
+        if (IsolatedLetter(line, col))
+            return true;
+        if (worientation != 1 && WLeft(line, col) == 0)
+            return true;
+        if (worientation != 0 && WUp(line, col) == 0)
+            return true;
+        if (worientation != 1 && WLeft(line, col) == 2)
+            ValidPosition(line, col - 1, 0);
+        if (worientation != 0 && WUp(line, col) == 2)
+            ValidPosition(line - 1, col, 1);
+    }
+    return false;
+}
+
+bool ScrabbleBoard::ValidLetter(int line, int col, vector<char> &plrpool)
+{
+    int splrpool = plrpool.size();
+    if (!ValidPosition(line, col, 2))
+        return false;
+    else
+    {
+        for (int i = 0; i < splrpool; i++)
+        {
+            if (plrpool[i] == gameboard[line][col])
+            {
+                plrpool.erase(plrpool.begin() + i);
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+int ScrabbleBoard::GetLine(string scoord)
+{
+    char chline = scoord[0];
+    chline = toupper(chline);
+    for (int i = 0; i < upper_letters.size(); i++)
+    {
+        if (upper_letters[i] == chline)
+            return i;
+    }
+    return 0;
+}
+
+int ScrabbleBoard::GetCol(string scoord)
+{
+    char chcol = scoord[1];
+    chcol = tolower(chcol);
+    for (int i = 0; i < lower_letters.size(); i++)
+    {
+        if (lower_letters[i] == chcol)
+            return i;
+    }
+    return 0;
+}
+
+
+string ScrabbleBoard::StringCoord()
+{
+    string sc;
+    while (true)
+    {
+
+        cout << endl << "Coordinates must be indicated with one Capital Letter Followed by one Lowercase Letter according to the Board." << endl;
+        cout << "Introduce the Coordinates: ";
+        cin >> sc;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+        }
+        else if (sc.size() != 2)
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << endl << "The Coordinates must be exactly Two Letters!" << endl;
+        }
+        else if (int(lower_letters[boardsize - 1]) < int(tolower(sc[0])) || int(upper_letters[boardsize - 1]) < int(toupper(sc[1])))
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << endl << "The Letters must be in the Board!" << endl;
+        }
+        else
+            break;
+    }
+    return sc;
+}
+
+int ScrabbleBoard::TurnScore(int line, int col, int worientation)
+{
+    int tscore = 0;
+    if (IsolatedLetter(line, col))
+    {
+        tscore = 1;
+        return tscore;
+    }
+
+    else
+    {
+        if (worientation != 0 && col == boardsize - 1 && WLeft(line, col) == 2)
+            tscore += 1;
+        else
+        {
+            if (worientation != 0 && WLeft(line, col) == 2)
+            {
+                if (WRight(line, col) == 0)
+                    tscore += 1;
+                if (WRight(line, col) == 2)
+                    tscore += TurnScore(line, col + 1, 1);
+            }
+        }
+
+        if (worientation != 1 && line == boardsize - 1 && WUp(line, col) == 2)
+            tscore += 1;
+        else
+        {
+            if (worientation != 1 && WUp(line, col) == 2)
+            {
+                if (WDown(line, col) == 0)
+                    tscore += 1;
+                if (WDown(line, col) == 2)
+                    tscore += TurnScore(line + 1, col, 0);
+            }
+        }
+    }
+    return tscore;
+}
+
+bool ScrabbleBoard::PlayPossible(vector<char> plrpool)
+{
+    vector <char> validl;
+    for (int a = 0; a < boardsize; a++)
+    {
+        for (int b = 0; b < boardsize; b++)
+        {
+            if (ValidPosition(a, b, 2))
+                validl.push_back(gameboard[a][b]);
+        }
+    }
+    if (validl.size() == 0)
+        return false;
+    int sizepp = plrpool.size();
+    int sizevl = validl.size();
+    for (int c = 0; c < sizepp; c++)
+    {
+        for (int d = 0; d < sizevl; d++)
+        {
+            if (plrpool[c] == validl[d])
+                return true;
+        }
+    }
+    return false;
 }
