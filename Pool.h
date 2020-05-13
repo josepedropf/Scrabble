@@ -16,6 +16,8 @@ public:
     // Gets the characters from the Game Board in order to make the initial letter pool
     char DrawRandomChar();
     void InitialDraw(int ndraw, int np);
+    void WritePlrPool(vector <char> plrpool, string pname);
+    void DrawPoolTurn(vector <char> &plrpool, int drawcount);
 };
 
 
