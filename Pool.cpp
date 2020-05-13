@@ -45,3 +45,26 @@ void Pool::InitialDraw(int ndraw, int np)
             charp4.push_back(DrawRandomChar());
     }
 }
+
+void Pool::WritePlrPool(vector<char> plrpool, string pname)
+{
+    int poolsize = plrpool.size();
+    cout << endl << "Current " << pname << "'s Pool: ";
+    for (int i = 0; i < poolsize; i++)
+    {
+        cout << plrpool[i] << "  ";
+    }
+    cout << endl;
+}
+
+void Pool::DrawPoolTurn(vector<char> &plrpool, int drawcount)
+{
+    cout << endl << "Pool Tiles Retrieved: ";
+    for (int i = 0; i < drawcount; i++)
+    {
+        char dchar = DrawRandomChar();
+        plrpool.push_back(dchar);
+        cout << dchar << "  ";
+    }
+    cout << endl;
+}
