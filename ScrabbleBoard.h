@@ -12,15 +12,28 @@ public:
                                    'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
     vector<vector <char>> gameboard;
     int boardsize = 0;
+    vector<vector <char>> playedl;
 
     void OpenBoard(string filename);
     // Make a Vector Board from a Board Text File
     void DrawGameBoard(unsigned int textcolor);
     // Draws the Game Board
     void SetColor(unsigned int color);
+    bool IsolatedLetter(int line, int col);
+    int WLeft(int line, int col);
+    int WRight(int line, int col);
+    int WUp(int line, int col);
+    int WDown(int line, int col);
+    bool ValidPosition(int line, int col, int worientaton);
+    bool ValidLetter(int line, int col, vector <char> &plrpool);
+    int GetLine(string scoord);
+    int GetCol(string scoord);
+    string StringCoord();
+    int TurnScore(int line, int col, int worientation);
+    bool PlayPossible(vector <char> plrpool);
 
 private:
-    vector<vector <char>> playedl;
+
 };
 
 
