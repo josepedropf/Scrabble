@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <vector>
 #include <ctime>
+#include <algorithm>
 #include <windows.h>
 #include "ScrabbleBoard.h"
 #include "Pool.h"
@@ -191,5 +192,21 @@ int main()
                 }
             }
         }
+        if (sb.scorechips == 0)
+            playing = false;
     }
+    vector <int> points;
+    points.push_back(plr.scorep1);
+    points.push_back(plr.scorep2);
+    if (plr.nplayers >= 3)
+        points.push_back(plr.scorep3);
+    if (plr.nplayers >= 4)
+        points.push_back(plr.scorep4);
+    sort(points.begin(), points.end());
+    cout << endl << "Points: ";
+    for (int i = 0; i < points.size(); i++)
+    {
+        cout << points[i] << "   ";
+    }
+    cout << endl << endl << "END";
 }
