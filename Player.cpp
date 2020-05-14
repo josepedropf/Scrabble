@@ -106,7 +106,7 @@ void Player::GetIA()
                 cout << "Input 4 for 1 Normal vs 2 IA" << endl;
                 cout << "Input 5 for 3 IA Players" << endl;
                 cin >> iaanswer;
-                if (cin.fail() || iaanswer < 0 || iaanswer > 5)
+                if (cin.fail() || iaanswer < 0 || iaanswer > 5 || iaanswer == 2 || iaanswer == 3)
                 {
                     cin.clear();
                     cin.ignore(1000, '\n');
@@ -127,7 +127,7 @@ void Player::GetIA()
                 cout << "Input 8 for 1 Normal vs 3 IA" << endl;
                 cout << "Input 9 for 4 IA Players" << endl;
                 cin >> iaanswer;
-                if (cin.fail() || iaanswer < 0 || iaanswer > 5)
+                if (cin.fail() || (iaanswer < 6 && iaanswer != 0) || iaanswer > 9)
                 {
                     cin.clear();
                     cin.ignore(1000, '\n');
@@ -200,4 +200,3 @@ void Player::GetIA()
         }
     }
 }
-
