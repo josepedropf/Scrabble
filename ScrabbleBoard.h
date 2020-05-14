@@ -12,6 +12,7 @@ public:
                                    'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
     vector<vector <char>> gameboard;
     int boardsize = 0;
+    int scorechips = 0;
     vector<vector <char>> playedl;
 
     void OpenBoard(string filename);
@@ -31,6 +32,8 @@ public:
     string StringCoord();
     int TurnScore(int line, int col, int worientation);
     bool PlayPossible(vector <char> plrpool);
+    vector <vector<int>> IAPossibilities(vector <char> plrpool);
+    void IAPlayer(vector <char> plrpool, vector <char> advpool, int &line, int &col);
 
 private:
 
