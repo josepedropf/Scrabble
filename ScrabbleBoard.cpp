@@ -58,6 +58,7 @@ void ScrabbleBoard::OpenBoard(string filename)
             break;
         else
         {
+            scorechips ++;
             for (int i = 0; i < lower_letters.size(); i++)
             {
                 if (lower_letters[i] == line[1])
