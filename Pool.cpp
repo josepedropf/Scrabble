@@ -68,3 +68,20 @@ void Pool::DrawPoolTurn(vector<char> &plrpool, int drawcount)
     }
     cout << endl;
 }
+
+void Pool::ExchangeTiles(vector<char> &plrpool)
+{
+    int tiles = 2, plrpoolindex = 0;
+    if (pool.size() == 1)
+        tiles = 1;
+    else
+        tiles = 2;
+    for (int i = 0; i < tiles; i++)
+    {
+        srand(time(0));
+        plrpoolindex = rand() % plrpool.size();
+        pool.push_back(plrpool[plrpoolindex]);
+        plrpool.erase(plrpool.begin() + plrpoolindex);
+    }
+    DrawPoolTurn(plrpool, tiles);
+}
