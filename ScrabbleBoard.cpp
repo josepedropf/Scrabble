@@ -347,6 +347,7 @@ int ScrabbleBoard::TurnScore(int line, int col, int worientation)
             }
         }
     }
+    scorechips -= tscore;
     return tscore;
 }
 
@@ -374,4 +375,67 @@ bool ScrabbleBoard::PlayPossible(vector<char> plrpool)
         }
     }
     return false;
+}
+
+vector <vector<int>> ScrabbleBoard::IAPossibilities(vector<char> plrpool)
+{
+    vector <vector<int>> allp;
+    vector <int> coordp;
+    for (int a = 0; a < boardsize; a++)
+    {
+        for (int b = 0; b < boardsize; b++)
+        {
+            if (ValidPosition(a, b, 2))
+            {
+                coordp.clear();
+                coordp.push_back(a);
+                coordp.push_back(b);
+                allp.push_back(coordp);
+            }
+        }
+    }
+    bool match = false;
+    int plsize = plrpool.size();
+    int allpsize = allp.size();
+    for (int c = 0; c < allpsize; c++)
+    {
+        match = false;
+        for (int d = 0; d < plsize; d++)
+        {
+            if (gameboard[allp[c][0]][allp[c][1]] == plrpool[d])
+                match = true;
+        }
+        if (!match)
+            allp.erase(allp.begin() + c);
+    }
+    return allp;
+}
+
+void ScrabbleBoard::IAPlayer(vector<char> plrpool, vector<char> advpool, int &line, int &col)
+{
+    vector <vector<int>> pplays = IAPossibilities(plrpool);
+    vector <vector<int>> future = IAPossibilities(advpool);
+    int iascore = 0, maxiascore = 0;
+    int advscore = 0, maxadvscore = 0;
+    int bestplay = 0;
+    vector <int> allscores;
+    int pplayssize = pplays.size();
+    for (int i = 0; i < pplayssize; i++)
+    {
+        iascore += TurnScore(pplays[i][0], pplays[i][1], 2);
+        for (int i = 0; i < pplayssize; i++)
+        {
+            advscore = TurnScore(future[i][0], future[i][1], 2);
+            if (advscore > maxadvscore)
+                maxadvscore = advscore;
+        }
+        iascore -= 0.5 * maxadvscore;
+        if (iascore > maxiascore)
+        {
+            maxiascore = iascore;
+            bestplay = i;
+        }
+    }
+    line = pplays[bestplay][0];
+    col = pplays[bestplay][1];
 }
