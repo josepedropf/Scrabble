@@ -592,17 +592,17 @@ void Board::DrawBoardClean(int boardsize,  vector <vector<char>> gameboard)
 
 void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> &gameboard, vector <string> possible_words)
 {
-    int nwords = 1;
-    cout << "Select the number of words [4 to " << (2 * boardsize) + 3 << "] or input 0 for a random size: ";
+    int nwords = 4;
+    cout << "Select the number of words [4 to " << (4 * boardsize) + 4 << "] or input 0 for a random size: ";
     while(1)
     {
         cin >> nwords;
-        if (cin.fail() || (nwords < 4 && nwords != 0) || nwords > (2 * boardsize) + 3)
+        if (cin.fail() || (nwords < 4 && nwords != 0) || nwords > (4 * boardsize) + 4)
         {
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "Invalid Input!" << endl;
-            cout << "Select the number of words [4 to " << (2 * boardsize) + 3 << "] or input 0 for a random size: ";
+            cout << "Select the number of words [4 to " << (4 * boardsize) + 4 << "] or input 0 for a random size: ";
         }
         else
             break;
@@ -611,7 +611,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
     if (nwords == 0)
     {
         srand(time(0));
-        nwords = rand() % (2 * boardsize) + 4;
+        nwords = rand() % (4 * boardsize) + 4;
         cout << endl << "Number of Words: " << nwords << endl;
     }
 
@@ -624,7 +624,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
         validword = false;
         while (!validword)
         {
-            if (counter >= 2 * boardsize)
+            if (counter >= boardsize * boardsize * boardsize && nwords > 4)
             {
                 validword = true;
                 counter = 0;
