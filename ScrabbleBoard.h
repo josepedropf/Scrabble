@@ -32,8 +32,8 @@ public:
     string StringCoord();
     int TurnScore(int line, int col, int worientation, bool chips);
     bool PlayPossible(vector <char> plrpool);
-    vector <vector<int>> IAPossibilities(vector <char> plrpool);
-    void IAPlayer(vector <char> plrpool, vector <char> advpool, int &line, int &col);
+    vector <vector<int>> IAPossibilities(vector <char> &plrpool);
+    void IAPlayer(vector <char> &plrpool, vector <char> advpool, int &line, int &col);
 
 private:
 
