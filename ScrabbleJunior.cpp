@@ -36,7 +36,7 @@ int main()
     ScrabbleBoard sb;
     string filen;
     string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
-    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\"
+    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
     unsigned int text_color = 1;
     int turn = 1, turncount = 0;
     int initiald = 7, line = 0, col = 0;
