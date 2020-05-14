@@ -36,6 +36,7 @@ int main()
     ScrabbleBoard sb;
     string filen;
     string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
+    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\"
     unsigned int text_color = 1;
     int turn = 1, turncount = 0;
     int initiald = 7, line = 0, col = 0;
@@ -111,6 +112,7 @@ int main()
         {
             case 1:
             {
+                playerscore = plr.scorep1;
                 isia = plr.ia1;
                 playername = plr.pname1;
                 playerpool = pool.charp1;
@@ -119,6 +121,7 @@ int main()
             }
             case 2:
             {
+                playerscore = plr.scorep2;
                 isia = plr.ia2;
                 playername = plr.pname2;
                 playerpool = pool.charp2;
@@ -130,6 +133,7 @@ int main()
             }
             case 3:
             {
+                playerscore = plr.scorep3;
                 isia = plr.ia3;
                 playername = plr.pname3;
                 playerpool = pool.charp3;
@@ -141,6 +145,7 @@ int main()
             }
             case 4:
             {
+                playerscore = plr.scorep4;
                 isia = plr.ia4;
                 playername = plr.pname4;
                 playerpool = pool.charp4;
@@ -150,7 +155,7 @@ int main()
         }
 
         cout << endl << "------------  " << playername << " TURN  " << "------------" << endl;
-        cout << playername << " ---> SCORE: " << plr.scorep1 << endl;
+        cout << playername << " ---> SCORE: " << playerscore << endl;
         cout << "scorechips: " << sb.scorechips << endl;
         sb.DrawGameBoard(text_color);
         pool.WritePlrPool(playerpool, playername);
@@ -194,25 +199,25 @@ int main()
         {
             case 1:
             {
-                plr.scorep1 += playerscore;
+                plr.scorep1 = playerscore;
                 pool.charp1 = playerpool;
                 break;
             }
             case 2:
             {
-                plr.scorep2 += playerscore;
+                plr.scorep2 = playerscore;
                 pool.charp2 = playerpool;
                 break;
             }
             case 3:
             {
-                plr.scorep3 += playerscore;
+                plr.scorep3 = playerscore;
                 pool.charp3 = playerpool;
                 break;
             }
             case 4:
             {
-                plr.scorep4 += playerscore;
+                plr.scorep4 = playerscore;
                 pool.charp4 = playerpool;
                 break;
             }
