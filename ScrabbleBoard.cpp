@@ -40,7 +40,7 @@ void ScrabbleBoard::OpenBoard(string filename)
     string word = "";
     ifstream boardfile;
     string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
-    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\"
+    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
     string txtfilename = path + filename + ".txt";
     boardfile.open(txtfilename);
     string line;
