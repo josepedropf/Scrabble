@@ -40,6 +40,7 @@ void ScrabbleBoard::OpenBoard(string filename)
     string word = "";
     ifstream boardfile;
     string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
+    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\"
     string txtfilename = path + filename + ".txt";
     boardfile.open(txtfilename);
     string line;
@@ -222,14 +223,22 @@ bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
     {
         if (IsolatedLetter(line, col))
             return true;
-        if (worientation != 1 && WLeft(line, col) == 0)
+        if (worientation != 1 && (WLeft(line, col) == 0 && WRight(line, col) != 0))
+        {
             return true;
-        if (worientation != 0 && WUp(line, col) == 0)
+        }
+        if (worientation != 0 && (WUp(line, col) == 0 && WDown(line, col) != 0))
+        {
             return true;
+        }
         if (worientation != 1 && WLeft(line, col) == 2)
-            ValidPosition(line, col - 1, 0);
+        {
+            return ValidPosition(line, col - 1, 0);
+        }
         if (worientation != 0 && WUp(line, col) == 2)
-            ValidPosition(line - 1, col, 1);
+        {
+            return ValidPosition(line - 1, col, 1);
+        }
     }
     return false;
 }
@@ -316,9 +325,7 @@ int ScrabbleBoard::TurnScore(int line, int col, int worientation, bool chips)
     if (IsolatedLetter(line, col))
     {
         tscore = 1;
-        return tscore;
     }
-
     else
     {
         if (worientation != 0 && col == boardsize - 1 && WLeft(line, col) == 2)
@@ -378,7 +385,7 @@ bool ScrabbleBoard::PlayPossible(vector<char> plrpool)
     return false;
 }
 
-vector <vector<int>> ScrabbleBoard::IAPossibilities(vector<char> plrpool)
+vector <vector<int>> ScrabbleBoard::IAPossibilities(vector<char> &plrpool)
 {
     vector <vector<int>> allp;
     vector <int> coordp;
@@ -388,30 +395,24 @@ vector <vector<int>> ScrabbleBoard::IAPossibilities(vector<char> plrpool)
         {
             if (ValidPosition(a, b, 2))
             {
-                coordp.clear();
-                coordp.push_back(a);
-                coordp.push_back(b);
-                allp.push_back(coordp);
+                for (int c = 0; c < plrpool.size(); c++)
+                {
+                    coordp.clear();
+                    if (gameboard[a][b] == plrpool[c])
+                    {
+                        coordp.push_back(a);
+                        coordp.push_back(b);
+                        allp.push_back(coordp);
+                        break;
+                    }
+                }
             }
         }
-    }
-    bool match = false;
-    int plsize = plrpool.size();
-    for (int c = 0; c < allp.size(); c++)
-    {
-        match = false;
-        for (int d = 0; d < plsize; d++)
-        {
-            if (gameboard[allp[c][0]][allp[c][1]] == plrpool[d])
-                match = true;
-        }
-        if (!match)
-            allp.erase(allp.begin() + c);
     }
     return allp;
 }
 
-void ScrabbleBoard::IAPlayer(vector<char> plrpool, vector<char> advpool, int &line, int &col)
+void ScrabbleBoard::IAPlayer(vector<char> &plrpool, vector<char> advpool, int &line, int &col)
 {
     vector <vector<int>> pplays = IAPossibilities(plrpool);
     vector <vector<int>> future = IAPossibilities(advpool);
