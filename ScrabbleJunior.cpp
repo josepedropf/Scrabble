@@ -169,7 +169,7 @@ int main()
                     line = sb.GetLine(scoord);
                     col = sb.GetCol(scoord);
                 }
-                if (isia || sb.ValidLetter(line, col, playerpool))
+                if (sb.ValidLetter(line, col, playerpool))
                 {
                     playerscore += sb.TurnScore(line, col, 2, true);
                     sb.playedl[line][col] = '1';
@@ -190,36 +190,34 @@ int main()
             if (pool.pool.size() > 0)
                 pool.ExchangeTiles(playerpool);
         }
-        if (playerscore != 0)
+        switch (turn)
         {
-            switch (turn)
+            case 1:
             {
-                case 1:
-                {
-                    plr.scorep1 += playerscore;
-                    pool.charp1 = playerpool;
-                    break;
-                }
-                case 2:
-                {
-                    plr.scorep2 += playerscore;
-                    pool.charp2 = playerpool;
-                    break;
-                }
-                case 3:
-                {
-                    plr.scorep3 += playerscore;
-                    pool.charp3 = playerpool;
-                    break;
-                }
-                case 4:
-                {
-                    plr.scorep4 += playerscore;
-                    pool.charp4 = playerpool;
-                    break;
-                }
+                plr.scorep1 += playerscore;
+                pool.charp1 = playerpool;
+                break;
             }
-        }
+            case 2:
+            {
+                plr.scorep2 += playerscore;
+                pool.charp2 = playerpool;
+                break;
+            }
+            case 3:
+            {
+                plr.scorep3 += playerscore;
+                pool.charp3 = playerpool;
+                break;
+            }
+            case 4:
+            {
+                plr.scorep4 += playerscore;
+                pool.charp4 = playerpool;
+                break;
+            }
+            }
+
         if (sb.scorechips == 0)
             playing = false;
     }
