@@ -18,6 +18,7 @@ public:
     void InitialDraw(int ndraw, int np);
     void WritePlrPool(vector <char> plrpool, string pname);
     void DrawPoolTurn(vector <char> &plrpool, int drawcount);
+    void ExchangeTiles(vector <char> &plrpool);
 };
 
 
