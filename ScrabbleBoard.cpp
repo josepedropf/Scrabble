@@ -39,7 +39,7 @@ void ScrabbleBoard::OpenBoard(string filename)
     vector <string> words;
     string word = "";
     ifstream boardfile;
-    string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\"; // "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\"
+    string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
     string txtfilename = path + filename + ".txt";
     boardfile.open(txtfilename);
     string line;
@@ -218,7 +218,7 @@ bool ScrabbleBoard::IsolatedLetter(int line, int col)
 
 bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
 {
-    if (isalpha(gameboard[line][col]) && playedl[line][col] != '1')
+    if (isalpha(gameboard[line][col]) && (worientation != 2 || playedl[line][col] != '1'))
     {
         if (IsolatedLetter(line, col))
             return true;
@@ -310,7 +310,7 @@ string ScrabbleBoard::StringCoord()
     return sc;
 }
 
-int ScrabbleBoard::TurnScore(int line, int col, int worientation)
+int ScrabbleBoard::TurnScore(int line, int col, int worientation, bool chips)
 {
     int tscore = 0;
     if (IsolatedLetter(line, col))
@@ -330,7 +330,7 @@ int ScrabbleBoard::TurnScore(int line, int col, int worientation)
                 if (WRight(line, col) == 0)
                     tscore += 1;
                 if (WRight(line, col) == 2)
-                    tscore += TurnScore(line, col + 1, 1);
+                    tscore += TurnScore(line, col + 1, 1, false);
             }
         }
 
@@ -343,11 +343,12 @@ int ScrabbleBoard::TurnScore(int line, int col, int worientation)
                 if (WDown(line, col) == 0)
                     tscore += 1;
                 if (WDown(line, col) == 2)
-                    tscore += TurnScore(line + 1, col, 0);
+                    tscore += TurnScore(line + 1, col, 0, false);
             }
         }
     }
-    scorechips -= tscore;
+    if (chips)
+        scorechips -= tscore;
     return tscore;
 }
 
@@ -396,8 +397,7 @@ vector <vector<int>> ScrabbleBoard::IAPossibilities(vector<char> plrpool)
     }
     bool match = false;
     int plsize = plrpool.size();
-    int allpsize = allp.size();
-    for (int c = 0; c < allpsize; c++)
+    for (int c = 0; c < allp.size(); c++)
     {
         match = false;
         for (int d = 0; d < plsize; d++)
@@ -420,12 +420,13 @@ void ScrabbleBoard::IAPlayer(vector<char> plrpool, vector<char> advpool, int &li
     int bestplay = 0;
     vector <int> allscores;
     int pplayssize = pplays.size();
+    int futsize = future.size();
     for (int i = 0; i < pplayssize; i++)
     {
-        iascore += TurnScore(pplays[i][0], pplays[i][1], 2);
-        for (int i = 0; i < pplayssize; i++)
+        iascore += TurnScore(pplays[i][0], pplays[i][1], 2, false);
+        for (int i = 0; i < futsize; i++)
         {
-            advscore = TurnScore(future[i][0], future[i][1], 2);
+            advscore = TurnScore(future[i][0], future[i][1], 2, false);
             if (advscore > maxadvscore)
                 maxadvscore = advscore;
         }
