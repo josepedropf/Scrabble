@@ -69,6 +69,7 @@ int main()
     sb.DrawGameBoard(text_color);
     pool.InitialPool(sb.gameboard, sb.boardsize);
     plr.GetPlayers();
+    plr.GetIA();
     int cn = 1;
     while(true)
     {
@@ -95,8 +96,9 @@ int main()
     srand(time(0));
     turn = rand() % plr.nplayers + 1;
     string playername;
-    vector <char> playerpool;
+    vector <char> playerpool, adversariepool;
     int playerscore = 0;
+    bool isia = false;
     while (playing)
     {
         if (turn < plr.nplayers)
@@ -109,45 +111,67 @@ int main()
         {
             case 1:
             {
+                isia = plr.ia1;
                 playername = plr.pname1;
                 playerpool = pool.charp1;
+                adversariepool = pool.charp2;
                 break;
             }
             case 2:
             {
+                isia = plr.ia2;
                 playername = plr.pname2;
                 playerpool = pool.charp2;
+                if (plr.nplayers >= 3)
+                    adversariepool = pool.charp3;
+                else
+                    adversariepool = pool.charp1;
                 break;
             }
             case 3:
             {
+                isia = plr.ia3;
                 playername = plr.pname3;
                 playerpool = pool.charp3;
+                if (plr.nplayers >= 4)
+                    adversariepool = pool.charp4;
+                else
+                    adversariepool = pool.charp1;
                 break;
             }
             case 4:
             {
+                isia = plr.ia4;
                 playername = plr.pname4;
                 playerpool = pool.charp4;
+                adversariepool = pool.charp1;
                 break;
             }
         }
 
         cout << endl << "------------  " << playername << " TURN  " << "------------" << endl;
         cout << playername << " ---> SCORE: " << plr.scorep1 << endl;
+        cout << "scorechips: " << sb.scorechips << endl;
+        sb.DrawGameBoard(text_color);
+        pool.WritePlrPool(playerpool, playername);
         while (turncount < 2 && sb.PlayPossible(playerpool))
         {
             validp = false;
             sb.DrawGameBoard(text_color);
             pool.WritePlrPool(playerpool, playername);
-            while (!validp)
+            while (playing && !validp)
             {
-                scoord = sb.StringCoord();
-                line = sb.GetLine(scoord);
-                col = sb.GetCol(scoord);
-                if (sb.ValidLetter(line, col, playerpool))
+                if (isia)
+                    sb.IAPlayer(playerpool, adversariepool, line, col);
+                else
                 {
-                    playerscore += sb.TurnScore(line, col, 2);
+                    scoord = sb.StringCoord();
+                    line = sb.GetLine(scoord);
+                    col = sb.GetCol(scoord);
+                }
+                if (isia || sb.ValidLetter(line, col, playerpool))
+                {
+                    playerscore += sb.TurnScore(line, col, 2, true);
                     sb.playedl[line][col] = '1';
                     turncount += 1;
                     validp = true;
@@ -161,7 +185,11 @@ int main()
         {
             pool.DrawPoolTurn(playerpool, min(turncount, pool.pool.size()));
         }
-
+        else
+        {
+            if (pool.pool.size() > 0)
+                pool.ExchangeTiles(playerpool);
+        }
         if (playerscore != 0)
         {
             switch (turn)
