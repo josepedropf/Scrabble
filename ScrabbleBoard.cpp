@@ -1,15 +1,12 @@
+#include "ScrabbleBoard.h"
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <cstdlib>
-#include <vector>
-#include <ctime>
-#include <algorithm>
 #include <windows.h>
-#include "ScrabbleBoard.h"
-#include "Pool.h"
-#include "Player.h"
-
+#include <vector>
+#include <iomanip>
+#include <cstdlib>
+#include <ctime>
+#include <string>
 using namespace std;
 
 #define BLACK 0
@@ -29,302 +26,455 @@ using namespace std;
 #define YELLOW 14
 #define WHITE 15
 
-int main()
+// 0 -> Vertical
+// 1 -> Horizontal
+
+void ScrabbleBoard::OpenBoard(string filename)
 {
-    Pool pool;
-    Player plr;
-    ScrabbleBoard sb;
-    string filen;
+    gameboard.clear();
+    vector <int> linepos;
+    vector <int> colpos;
+    vector <int> orient;
+    vector <char> boardline;
+    vector <string> words;
+    string word = "";
+    ifstream boardfile;
     string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
     //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
-    unsigned int text_color = 1;
-    int turn = 1, turncount = 0, rranswer = 1;
-    int initiald = 7, line = 0, col = 0;
-    string scoord;
-    bool playing = true, validp = false, rr = true;
-    sb.SetColor(text_color);
-    while (rr)
+    string txtfilename = path + filename + ".txt";
+    boardfile.open(txtfilename);
+    string line;
+    getline(boardfile, line);
+    if (line[1] == 'x')
+        boardsize = line[0];
+    else
     {
-        if (rranswer == 0)
-        {
-            sb.playedl.clear();
-            sb.gameboard.clear();
-            playing = true;
-            plr.scorep1 = plr.scorep2 = plr.scorep3 = plr.scorep4 = 0;
-            sb.scorechips = 0;
-            pool.pool.clear();
-            pool.charp1.clear();
-            pool.charp2.clear();
-            pool.charp3.clear();
-            pool.charp4.clear();
-        }
-        cout << endl << "Welcome to Scrabble Junior!" << endl;
-        cout << "What's the name of the Board File (without .txt) : ";
-        while(true)
-        {
-            cin >> filen;
-            if (cin.fail())
-            {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << endl << "Invalid File Name!" << endl;
-                cout << "What's the name of the Board File (without .txt) : ";
-            }
-            fstream Bfile(path + filen + ".txt");
-            if (Bfile.fail())
-            {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << endl << "Invalid File Name!" << endl;
-                cout << "What's the name of the Board File (without .txt) : ";
-            }
-            else
-                break;
-        }
-        sb.OpenBoard(filen);
-        sb.DrawGameBoard(text_color);
-        pool.InitialPool(sb.gameboard, sb.boardsize);
-        plr.GetPlayers();
-        plr.GetIA();
-        int cn = 1;
-        while(true)
-        {
-            cout << endl << "Do you want to customize your names? [0 for No || Any other number for Yes] ";
-            cin >> cn;
-            if(cin.fail())
-            {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << endl << "Invalid Answer (it has to be a Number)! " << endl;
-            }
-            else
-                break;
-        }
-
-        if (cn != 0)
-            plr.CustomPlayerNames();
-
-        if (pool.pool.size() >= 7 * plr.nplayers)
-            initiald = 7;
+        string bs = line.substr(0, 2);
+        boardsize = stoi(bs);
+    }
+    while (true)
+    {
+        getline(boardfile, line);
+        if (line.size() == 0)
+            break;
         else
-            initiald = pool.pool.size() / plr.nplayers;
-        pool.InitialDraw(initiald, plr.nplayers);
-        srand(time(0));
-        turn = rand() % plr.nplayers + 1;
-        string playername;
-        vector <char> playerpool, adversariepool;
-        int playerscore = 0;
-        bool isia = false;
-        while (playing)
         {
-            if (turn < plr.nplayers)
-                turn ++;
+            scorechips ++;
+            for (int i = 0; i < lower_letters.size(); i++)
+            {
+                if (lower_letters[i] == line[1])
+                    colpos.push_back(i);
+                if (upper_letters[i] == line[0])
+                    linepos.push_back(i);
+            }
+            if (line[3] == 'H')
+                orient.push_back(1);
             else
-                turn = 1;
-            turncount = 0;
-            playerscore = 0;
-            switch (turn)
+                orient.push_back(0);
+            word = "";
+            for (int i = 5; i < line.size(); i++)
             {
-                case 1:
-                {
-                    playerscore = plr.scorep1;
-                    isia = plr.ia1;
-                    playername = plr.pname1;
-                    playerpool = pool.charp1;
-                    adversariepool = pool.charp2;
-                    break;
-                }
-                case 2:
-                {
-                    playerscore = plr.scorep2;
-                    isia = plr.ia2;
-                    playername = plr.pname2;
-                    playerpool = pool.charp2;
-                    if (plr.nplayers >= 3)
-                        adversariepool = pool.charp3;
-                    else
-                        adversariepool = pool.charp1;
-                    break;
-                }
-                case 3:
-                {
-                    playerscore = plr.scorep3;
-                    isia = plr.ia3;
-                    playername = plr.pname3;
-                    playerpool = pool.charp3;
-                    if (plr.nplayers >= 4)
-                        adversariepool = pool.charp4;
-                    else
-                        adversariepool = pool.charp1;
-                    break;
-                }
-                case 4:
-                {
-                    playerscore = plr.scorep4;
-                    isia = plr.ia4;
-                    playername = plr.pname4;
-                    playerpool = pool.charp4;
-                    adversariepool = pool.charp1;
-                    break;
-                }
+                word.push_back(line[i]);
             }
-
-            cout << endl << "------------  " << playername << " TURN  " << "------------" << endl;
-            cout << playername << " ---> SCORE: " << playerscore << endl;
-            cout << "scorechips: " << sb.scorechips << endl;
-            while (turncount < 2 && sb.PlayPossible(playerpool))
-            {
-                validp = false;
-                sb.DrawGameBoard(text_color);
-                pool.WritePlrPool(playerpool, playername);
-                while (playing && !validp)
-                {
-                    if (isia)
-                        sb.IAPlayer(playerpool, adversariepool, line, col);
-                    else
-                    {
-                        scoord = sb.StringCoord();
-                        line = sb.GetLine(scoord);
-                        col = sb.GetCol(scoord);
-                    }
-                    if (sb.ValidLetter(line, col, playerpool))
-                    {
-                        sb.playedl[line][col] = '1';
-                        playerscore += sb.TurnScore(line, col,true);
-                        turncount += 1;
-                        validp = true;
-                    }
-                    else
-                        cout << endl << "Invalid Letter for the current Board Layout!" << endl;
-                }
-            }
-
-            if (turncount != 0)
-            {
-                pool.DrawPoolTurn(playerpool, min(turncount, pool.pool.size()));
-            }
-            else
-            {
-                if (pool.pool.size() > 0)
-                    pool.ExchangeTiles(playerpool);
-            }
-            switch (turn)
-            {
-                case 1:
-                {
-                    plr.scorep1 = playerscore;
-                    pool.charp1 = playerpool;
-                    break;
-                }
-                case 2:
-                {
-                    plr.scorep2 = playerscore;
-                    pool.charp2 = playerpool;
-                    break;
-                }
-                case 3:
-                {
-                    plr.scorep3 = playerscore;
-                    pool.charp3 = playerpool;
-                    break;
-                }
-                case 4:
-                {
-                    plr.scorep4 = playerscore;
-                    pool.charp4 = playerpool;
-                    break;
-                }
-            }
-            cout << endl << "------------" << endl << "Points: " << plr.scorep1 + plr.scorep2 + plr.scorep3 + plr.scorep4 << endl << "------------" << endl;
-            sb.DrawGameBoard(text_color);
-            pool.WritePlrPool(playerpool, playername);
-            if (sb.scorechips == 0)
-                playing = false;
+            words.push_back(word);
         }
-        sb.DrawGameBoard(text_color);
-        cout << endl << endl << "------------" << "  GAME OVER  " << "------------" << endl;
-        vector <vector<int>> points;
-        vector <int> numberpoints;
-        numberpoints = {1, plr.scorep1};
-        points.push_back(numberpoints);
-        numberpoints = {2, plr.scorep2};
-        points.push_back(numberpoints);
-        if (plr.nplayers >= 3)
-        {
-            numberpoints = {3, plr.scorep3};
-            points.push_back(numberpoints);
-        }
-        if (plr.nplayers >= 4)
-        {
-            numberpoints = {4, plr.scorep4};
-            points.push_back(numberpoints);
-        }
-        sort(points.begin(), points.end(),
-                [](const std::vector<int>& a, const std::vector<int>& b) {return a[1] > b[1];});
-        cout << endl << endl << endl;
-        vector <string> places = {"First Place: ", "Second Place:", "Third Place: ", "Fourth Place:"};
-        string iastring = " [IA Player] ", winnername = plr.pname1, winnerias = iastring;
-        int winnerp = 0;
-        for (int i = 0; i < points.size(); i++)
-        {
-            switch (points[i][0])
-            {
-                case 1:
-                {
-                    isia = plr.ia1;
-                    playername = plr.pname1;
-                    break;
-                }
-                case 2:
-                {
-                    isia = plr.ia2;
-                    playername = plr.pname2;
-                    break;
-                }
-                case 3:
-                {
-                    isia = plr.ia3;
-                    playername = plr.pname3;
-                    break;
-                }
-                case 4:
-                {
-                    isia = plr.ia4;
-                    playername = plr.pname4;
-                    break;
-                }
-            }
-            if (isia)
-                iastring = " [IA Player] ";
-            else
-                iastring = " [Human Player] ";
-            if (i == 0)
-            {
-                winnername = playername;
-                winnerias = iastring;
-                winnerp = points[i][1];
-            }
-            cout << places[i] << iastring << playername << " with " << points[i][1] << " Points." << endl;
-        }
-
-        cout << endl << "THE WINNER IS " << winnername << winnerias << "WITH " << winnerp << " POINTS!";
-        cout << endl << endl << "------------" << " THE END  " << "------------" << endl;
-
-        while (true)
-        {
-            cout << endl << "Do you want to Restart? [0 for No || Any other number for Yes] ";
-            cin >> rranswer;
-            if(cin.fail())
-            {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << endl << "Invalid Answer (it has to be a Number)! " << endl;
-            }
-            else
-                break;
-        }
-        if (rranswer == 0)
-            rr = false;
-        rranswer = 0;
     }
+    for (int i = 0; i < boardsize; i++)
+    {
+        boardline.push_back('0');
     }
+
+    for (int i = 0; i < boardsize; i++)
+    {
+        gameboard.push_back(boardline);
+        playedl.push_back(boardline);
+    }
+
+    for (int i = 0; i < linepos.size(); i++)
+    {
+        string wrd = words[i];
+        for (int a = 0; a < wrd.size(); a++)
+        {
+            switch (orient[i])
+            {
+                case 0:
+                {
+                    gameboard[linepos[i] + a][colpos[i]] = wrd[a];
+                    break;
+                }
+                case 1:
+                {
+                    gameboard[linepos[i]][colpos[i] + a] = wrd[a];
+                    break;
+                }
+            }
+        }
+    }
+    boardfile.close();
+}
+
+void ScrabbleBoard::SetColor(unsigned int color)
+{
+    HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hcon, color);
+}
+
+void ScrabbleBoard::DrawGameBoard(unsigned int textcolor)
+{
+    unsigned int chcolor = textcolor;
+    char drawch = ' ';
+    cout << endl << "   ";
+    for (int i = 0; i < boardsize; i++)
+        cout << lower_letters[i] << "  ";
+    cout << endl;
+    for (int a = 0; a < boardsize; a++)
+    {
+        cout << upper_letters[a] << "  ";
+        for (int b = 0; b < boardsize; b++)
+        {
+            if (playedl[a][b] == '1')
+                chcolor = 4;
+            else
+                chcolor = textcolor;
+            SetColor(chcolor);
+            drawch = ' ';
+            if (isalpha(gameboard[a][b]))
+                drawch = gameboard[a][b];
+            cout << drawch << "  ";
+            SetColor(textcolor);
+        }
+        cout << endl;
+    }
+    cout << endl << endl;
+}
+
+
+int ScrabbleBoard::WLeft(int line, int col)
+{
+    if (col != 0)
+    {
+        if (gameboard[line][col - 1] == '0')
+            return 0;
+        else if (playedl[line][col - 1] == '1')
+            return 2;
+        else
+            return 1;
+    }
+    else
+        return 0;
+}
+
+int ScrabbleBoard::WRight(int line, int col)
+{
+    if (col < boardsize - 1)
+    {
+        if (gameboard[line][col + 1] == '0')
+            return 0;
+        else if (playedl[line][col + 1] == '1')
+            return 2;
+        else
+            return 1;
+    }
+    else
+        return 0;
+}
+
+int ScrabbleBoard::WUp(int line, int col)
+{
+    if (line != 0)
+    {
+        if (gameboard[line - 1][col] == '0')
+            return 0;
+        else if (playedl[line - 1][col] == '1')
+            return 2;
+        else
+            return 1;
+    }
+    else
+        return 0;
+}
+
+int ScrabbleBoard::WDown(int line, int col)
+{
+    if (line < boardsize - 1)
+    {
+        if (gameboard[line + 1][col] == '0')
+            return 0;
+        else if (playedl[line + 1][col] == '1')
+            return 2;
+        else
+            return 1;
+    }
+    else
+        return 0;
+}
+
+bool ScrabbleBoard::IsolatedLetter(int line, int col)
+{
+    return WLeft(line, col) + WRight(line, col) + WUp(line, col) + WDown(line, col) == 0;
+}
+
+
+bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
+{
+    if (isalpha(gameboard[line][col]) && (worientation != 2 || playedl[line][col] != '1'))
+    {
+        if (IsolatedLetter(line, col))
+            return true;
+        if (worientation != 1 && (WLeft(line, col) == 0 && WRight(line, col) != 0))
+        {
+            return true;
+        }
+        if (worientation != 0 && (WUp(line, col) == 0 && WDown(line, col) != 0))
+        {
+            return true;
+        }
+        if (worientation != 1 && WLeft(line, col) == 2)
+        {
+            return ValidPosition(line, col - 1, 0);
+        }
+        if (worientation != 0 && WUp(line, col) == 2)
+        {
+            return ValidPosition(line - 1, col, 1);
+        }
+    }
+    return false;
+}
+
+bool ScrabbleBoard::ValidLetter(int line, int col, vector<char> &plrpool)
+{
+    int splrpool = plrpool.size();
+    if (!ValidPosition(line, col, 2))
+        return false;
+    else
+    {
+        for (int i = 0; i < splrpool; i++)
+        {
+            if (plrpool[i] == gameboard[line][col])
+            {
+                plrpool.erase(plrpool.begin() + i);
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+int ScrabbleBoard::GetLine(string scoord)
+{
+    char chline = scoord[0];
+    chline = toupper(chline);
+    for (int i = 0; i < upper_letters.size(); i++)
+    {
+        if (upper_letters[i] == chline)
+            return i;
+    }
+    return 0;
+}
+
+int ScrabbleBoard::GetCol(string scoord)
+{
+    char chcol = scoord[1];
+    chcol = tolower(chcol);
+    for (int i = 0; i < lower_letters.size(); i++)
+    {
+        if (lower_letters[i] == chcol)
+            return i;
+    }
+    return 0;
+}
+
+
+string ScrabbleBoard::StringCoord()
+{
+    string sc;
+    while (true)
+    {
+
+        cout << endl << "Coordinates must be indicated with one Capital Letter Followed by one Lowercase Letter according to the Board." << endl;
+        cout << "Introduce the Coordinates: ";
+        cin >> sc;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+        }
+        else if (sc.size() != 2)
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << endl << "The Coordinates must be exactly Two Letters!" << endl;
+        }
+        else if (int(lower_letters[boardsize - 1]) < int(tolower(sc[0])) || int(upper_letters[boardsize - 1]) < int(toupper(sc[1])))
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << endl << "The Letters must be in the Board!" << endl;
+        }
+        else
+            break;
+    }
+    return sc;
+}
+
+bool ScrabbleBoard::CompCheckLeft(int line, int col)
+{
+    if (WLeft(line, col) == 0 && WRight(line, col) == 0)
+        return false;
+    else
+    {
+        if (WLeft(line, col) == 0)
+            return true;
+        else if (WLeft(line, col) == 2)
+            return CompCheckLeft(line, col - 1);
+        else
+            return false;
+    }
+}
+
+bool ScrabbleBoard::CompCheckRight(int line, int col)
+{
+    if (WLeft(line, col) == 0 && WRight(line, col) == 0)
+        return false;
+    else
+    {
+        if (WRight(line, col) == 0)
+            return true;
+        else if (WRight(line, col) == 2)
+            return CompCheckRight(line, col + 1);
+        else
+            return false;
+    }
+}
+
+bool ScrabbleBoard::CompCheckUp(int line, int col)
+{
+    if (WUp(line, col) == 0 && WDown(line, col) == 0)
+        return false;
+    else
+    {
+        if (WUp(line, col) == 0)
+            return true;
+        else if (WUp(line, col) == 2)
+            return CompCheckUp(line - 1, col);
+        else
+            return false;
+    }
+}
+
+bool ScrabbleBoard::CompCheckDown(int line, int col)
+{
+    if (WUp(line, col) == 0 && WDown(line, col) == 0)
+        return false;
+    else
+    {
+        if (WDown(line, col) == 0)
+            return true;
+        else if (WDown(line, col) == 2)
+            return CompCheckDown(line + 1, col);
+        else
+            return false;
+    }
+}
+
+int ScrabbleBoard::TurnScore(int line, int col, bool chips)
+{
+    int tscore = 0;
+    if (IsolatedLetter(line, col))
+    {
+        tscore = 1;
+    }
+    else
+    {
+        if (CompCheckLeft(line, col) && CompCheckRight(line, col))
+            tscore += 1;
+        if (CompCheckUp(line, col) && CompCheckDown(line, col))
+            tscore += 1;
+    }
+    if (chips)
+        scorechips -= tscore;
+    return tscore;
+}
+
+bool ScrabbleBoard::PlayPossible(vector<char> plrpool)
+{
+    vector <char> validl;
+    for (int a = 0; a < boardsize; a++)
+    {
+        for (int b = 0; b < boardsize; b++)
+        {
+            if (ValidPosition(a, b, 2))
+                validl.push_back(gameboard[a][b]);
+        }
+    }
+    if (validl.size() == 0)
+        return false;
+    int sizepp = plrpool.size();
+    int sizevl = validl.size();
+    for (int c = 0; c < sizepp; c++)
+    {
+        for (int d = 0; d < sizevl; d++)
+        {
+            if (plrpool[c] == validl[d])
+                return true;
+        }
+    }
+    return false;
+}
+
+vector <vector<int>> ScrabbleBoard::IAPossibilities(vector<char> &plrpool)
+{
+    vector <vector<int>> allp;
+    vector <int> coordp;
+    for (int a = 0; a < boardsize; a++)
+    {
+        for (int b = 0; b < boardsize; b++)
+        {
+            if (ValidPosition(a, b, 2))
+            {
+                for (int c = 0; c < plrpool.size(); c++)
+                {
+                    coordp.clear();
+                    if (gameboard[a][b] == plrpool[c])
+                    {
+                        coordp.push_back(a);
+                        coordp.push_back(b);
+                        allp.push_back(coordp);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return allp;
+}
+
+void ScrabbleBoard::IAPlayer(vector<char> &plrpool, vector<char> advpool, int &line, int &col)
+{
+    vector <vector<int>> pplays = IAPossibilities(plrpool);
+    vector <vector<int>> future = IAPossibilities(advpool);
+    int iascore = 0, maxiascore = 0;
+    int advscore = 0, maxadvscore = 0;
+    int bestplay = 0;
+    vector <int> allscores;
+    int pplayssize = pplays.size();
+    int futsize = future.size();
+    for (int i = 0; i < pplayssize; i++)
+    {
+        iascore = TurnScore(pplays[i][0], pplays[i][1], false);
+        for (int i = 0; i < futsize; i++)
+        {
+            advscore = TurnScore(future[i][0], future[i][1], false);
+            if (advscore > maxadvscore)
+                maxadvscore = advscore;
+        }
+        iascore -= 0.5 * maxadvscore;
+        if (iascore > maxiascore)
+        {
+            maxiascore = iascore;
+            bestplay = i;
+        }
+    }
+    line = pplays[bestplay][0];
+    col = pplays[bestplay][1];
+}
