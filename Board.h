@@ -1,11 +1,9 @@
+#ifndef BOARDBUILDER_BOARD_H
+#define BOARDBUILDER_BOARD_H
 #include <string>
 #include <vector>
+#include <ctime>
 using namespace std;
-#ifndef SCRABBLEBOARDBUILDER_BOARD_H
-#define SCRABBLEBOARDBUILDER_BOARD_H
-//#ifndef BOARDBUILDER_BOARD_H
-//#define BOARDBUILDER_BOARD_H
-
 
 class Board {
 
@@ -22,7 +20,7 @@ public:
     void PickSize(int &boardsize);
     bool EmptySpot(vector <vector<char>> gameboard, int boardsize);
     void GetWords(vector <string> &possible_words, vector <vector<char>> gameboard);
-    void Coordinates(vector <vector<char>> &gameboard, int boardsize, vector <int> npos, vector <string> possible_words, 
+    void Coordinates(vector <vector<char>> &gameboard, int boardsize, vector <int> npos, vector <string> possible_words,
                      int mode);
     int WordsRange(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
                    vector <vector<char>> gameboard, vector <string> &wordsrange);
@@ -54,7 +52,4 @@ private:
     char orientation;
 };
 
-
-
-#endif //SCRABBLEBOARDBUILDER_BOARD_H
-//#endif //BOARDBUILDER_BOARD_H
+#endif //BOARDBUILDER_BOARD_H
