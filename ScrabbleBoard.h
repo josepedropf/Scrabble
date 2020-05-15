@@ -30,7 +30,11 @@ public:
     int GetLine(string scoord);
     int GetCol(string scoord);
     string StringCoord();
-    int TurnScore(int line, int col, int worientation, bool chips);
+    bool CompCheckLeft(int line, int col);
+    bool CompCheckRight(int line, int col);
+    bool CompCheckUp(int line, int col);
+    bool CompCheckDown(int line, int col);
+    int TurnScore(int line, int col, bool chips);
     bool PlayPossible(vector <char> plrpool);
     vector <vector<int>> IAPossibilities(vector <char> &plrpool);
     void IAPlayer(vector <char> &plrpool, vector <char> advpool, int &line, int &col);
