@@ -10,10 +10,8 @@ public:
                                    'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
     vector <char> upper_letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
                                    'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-    vector<vector <char>> gameboard;
-    int boardsize = 0;
-    int scorechips = 0;
-    vector<vector <char>> playedl;
+    vector<vector <char>> gameboard, playedl;
+    int boardsize = 0, scorechips = 0;
 
     void OpenBoard(string filename);
     // Make a Vector Board from a Board Text File
