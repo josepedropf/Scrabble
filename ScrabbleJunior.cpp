@@ -35,13 +35,13 @@ int main()
     Player plr;
     ScrabbleBoard sb;
     string filen;
-    string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
-    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
+    //string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
+    string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
     unsigned int text_color = 1;
-    int turn = 1, turncount = 0, rranswer = 1;
+    int turn, turncount = 0, rranswer = 1;
     int initiald = 7, line = 0, col = 0;
     string scoord;
-    bool playing = true, validp = false, rr = true;
+    bool playing = true, validp, rr = true;
     sb.SetColor(text_color);
     while (rr)
     {
@@ -80,7 +80,7 @@ int main()
                 break;
         }
         sb.OpenBoard(filen);
-        sb.DrawGameBoard(text_color);
+        sb.DrawGameBoard(2);
         pool.InitialPool(sb.gameboard, sb.boardsize);
         plr.GetPlayers();
         plr.GetIA();
@@ -167,15 +167,15 @@ int main()
                 }
             }
 
-            cout << endl << "------------  " << playername << " TURN  " << "------------" << endl;
+            cout << endl << "------------  " << playername << "'s TURN  " << "------------" << endl;
             cout << playername << " ---> SCORE: " << playerscore << endl;
             cout << "scorechips: " << sb.scorechips << endl;
-            sb.DrawGameBoard(text_color);
+            sb.DrawGameBoard(2);
             pool.WritePlrPool(playerpool, playername);
             while (turncount < 2 && sb.PlayPossible(playerpool))
             {
                 validp = false;
-                sb.DrawGameBoard(text_color);
+                sb.DrawGameBoard(2);
                 pool.WritePlrPool(playerpool, playername);
                 while (playing && !validp)
                 {
@@ -189,7 +189,7 @@ int main()
                     }
                     if (sb.ValidLetter(line, col, playerpool))
                     {
-                        playerscore += sb.TurnScore(line, col, 2, true);
+                        playerscore += sb.TurnScore(line, col, true);
                         sb.playedl[line][col] = '1';
                         turncount += 1;
                         validp = true;
@@ -205,7 +205,7 @@ int main()
             }
             else
             {
-                if (pool.pool.size() > 0)
+                if (!pool.pool.empty())
                     pool.ExchangeTiles(playerpool);
             }
             switch (turn)
@@ -248,9 +248,9 @@ int main()
             points.push_back(plr.scorep4);
         sort(points.begin(), points.end());
         cout << endl << "Points: ";
-        for (int i = 0; i < points.size(); i++)
+        for (int point : points)
         {
-            cout << points[i] << "   ";
+            cout << point << "   ";
         }
         cout << endl << endl << "END";
 
@@ -271,4 +271,4 @@ int main()
             rr = false;
         rranswer = 0;
     }
-    }
+}
