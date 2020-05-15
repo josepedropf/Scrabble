@@ -3,9 +3,6 @@
 #include <fstream>
 #include <windows.h>
 #include <vector>
-#include <iomanip>
-#include <cstdlib>
-#include <ctime>
 #include <string>
 using namespace std;
 
@@ -37,10 +34,10 @@ void ScrabbleBoard::OpenBoard(string filename)
     vector <int> orient;
     vector <char> boardline;
     vector <string> words;
-    string word = "";
+    string word;
     ifstream boardfile;
-    string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
-    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
+    //string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
+    string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
     string txtfilename = path + filename + ".txt";
     boardfile.open(txtfilename);
     string line;
@@ -55,7 +52,7 @@ void ScrabbleBoard::OpenBoard(string filename)
     while (true)
     {
         getline(boardfile, line);
-        if (line.size() == 0)
+        if (line.empty())
             break;
         else
         {
@@ -141,7 +138,7 @@ void ScrabbleBoard::DrawGameBoard(unsigned int textcolor)
             if (isalpha(gameboard[a][b]))
                 drawch = gameboard[a][b];
             cout << drawch << "  ";
-            SetColor(textcolor);
+            SetColor(1);
         }
         cout << endl;
     }
@@ -407,7 +404,7 @@ bool ScrabbleBoard::PlayPossible(vector<char> plrpool)
                 validl.push_back(gameboard[a][b]);
         }
     }
-    if (validl.size() == 0)
+    if (validl.empty())
         return false;
     int sizepp = plrpool.size();
     int sizevl = validl.size();
@@ -432,10 +429,10 @@ vector <vector<int>> ScrabbleBoard::IAPossibilities(vector<char> &plrpool)
         {
             if (ValidPosition(a, b, 2))
             {
-                for (int c = 0; c < plrpool.size(); c++)
+                for (char c : plrpool)
                 {
                     coordp.clear();
-                    if (gameboard[a][b] == plrpool[c])
+                    if (gameboard[a][b] == c)
                     {
                         coordp.push_back(a);
                         coordp.push_back(b);
