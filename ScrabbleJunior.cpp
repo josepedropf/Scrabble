@@ -168,7 +168,7 @@ int main()
             }
 
             cout << endl << "------------  " << playername << "'s TURN  " << "------------" << endl;
-            cout << playername << " ---> SCORE: " << playerscore << endl;
+            cout << playername << "'s SCORE: " << playerscore << endl;
             cout << "scorechips: " << sb.scorechips << endl;
             sb.DrawGameBoard(2);
             pool.WritePlrPool(playerpool, playername);
