@@ -59,11 +59,13 @@ void Pool::WritePlrPool(vector<char> plrpool, string pname)
 {
     int poolsize = plrpool.size();
     cout << endl << "Current " << pname << "'s Pool: ";
+    SetColor(2);
     for (int i = 0; i < poolsize; i++)
     {
         cout << plrpool[i] << "  ";
     }
     cout << endl;
+    SetColor(1);
 }
 
 void Pool::DrawPoolTurn(vector<char> &plrpool, int drawcount)
