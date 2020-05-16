@@ -203,12 +203,12 @@ int Board::WordsRange(vector <int> numberpos, int orient, int boardsize, vector 
             }
         }
     }
-    cout << endl << "Max Range: " << maxrange << endl;
-    for (int i=0 ; i < possible_words.size(); i++)
+    //cout << endl << "Max Range: " << maxrange << endl;
+    for (auto & possible_word : possible_words)
     {
-        if (possible_words[i].size() <= maxrange)
+        if (possible_word.size() <= maxrange)
         {
-            wordsrange.push_back(possible_words[i]);
+            wordsrange.push_back(possible_word);
             //cout << possible_words[i] << endl;
         }
     }
@@ -224,9 +224,9 @@ bool Board::AtLeastOneWord(vector <int> numberpos, int orient, int boardsize, ve
         return false;
     else
     {
-        for (int i = 0; i < worange.size(); i++)
+        for (auto & i : worange)
         {
-            if (ValidWord(numberpos, orient, boardsize, gameboard, worange[i]))
+            if (ValidWord(numberpos, orient, boardsize, gameboard, i))
                 return true;
         }
     }
@@ -249,16 +249,16 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
         chword = lower_letters[rletter];
     }
     else
-        {
+    {
         int wwsize = 0, sectioni = 0;
         while (words_wrange.size() > 4) {
             wwsize = words_wrange.size() / 4;
             srand(time(0));
             sectioni = rand() % 4;
             word_index = rand() % wwsize + (sectioni * wwsize);
-            cout << word_index << endl;
+            //cout << word_index << endl;
             chword = words_wrange[word_index];
-            cout << chword << endl;
+            //cout << chword << endl;
             if (ValidWord(numberpos, orient, boardsize, gameboard, chword)) {
                 break;
             } else {
@@ -266,7 +266,7 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
             }
         }
     }
-    cout << "Selected Word: " << chword << endl;
+    //cout << "Selected Word: " << chword << endl;
     return chword;
 }
 
@@ -537,8 +537,8 @@ void Board::Coordinates(vector <vector<char>> &gameboard,
 void Board::GetWords(vector <string> &possible_words, vector <vector<char>> gameboard)
 {
     fstream wordfile;
-    //wordfile.open("C:\\Users\\Utilizador\\Desktop\\WORDS.TXT");
-    wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
+    wordfile.open("C:\\Users\\Utilizador\\Desktop\\WORDS.TXT");
+    //wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
     //wordfile.open("WORDS.TXT");
     string content;
 
@@ -595,7 +595,7 @@ void Board::DrawBoardClean(int boardsize,  vector <vector<char>> gameboard)
 void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> &gameboard, vector <string> possible_words)
 {
     int nwords = 4;
-    cout << "Select the number of words [4 to " << (4 * boardsize) + 4 << "] or input 0 for a random size: ";
+    cout << "Select the number of words [4 to " << (4 * boardsize) + 4 << "] or input 0 for a random number: ";
     while(1)
     {
         cin >> nwords;
@@ -604,7 +604,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "Invalid Input!" << endl;
-            cout << "Select the number of words [4 to " << (4 * boardsize) + 4 << "] or input 0 for a random size: ";
+            cout << "Select the number of words [4 to " << (4 * boardsize) + 4 << "] or input 0 for a random number: ";
         }
         else
             break;
@@ -632,7 +632,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
             npos[0] = cl;
             npos[1] = cc;
             counter ++;
-            cout << endl << cl << " , " << cc << endl;
+            //cout << endl << cl << " , " << cc << endl;
             if (i > 3 && counter >= boardsize * boardsize * 2)
             {
                 validword = true;
@@ -649,7 +649,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
                 {
                     srand(time(0));
                     randomor = rand() % 2;
-                    cout << endl << randomor << endl;
+                    //cout << endl << randomor << endl;
                     if (ValidOrientation(npos, randomor, boardsize, gameboard))
                     {
                         if (AtLeastOneWord(npos, randomor, boardsize, possible_words, gameboard))
@@ -664,7 +664,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
                             randomor = 1;
                         else
                             randomor = 0;
-                        cout << endl << randomor << endl;
+                        //cout << endl << randomor << endl;
                         if (ValidOrientation(npos, randomor, boardsize, gameboard))
                         {
                             if (AtLeastOneWord(npos, randomor, boardsize, possible_words, gameboard))
