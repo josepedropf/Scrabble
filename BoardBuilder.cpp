@@ -39,7 +39,7 @@ int main()
         board.DrawBoard(boardsize, gameboard);
 
         cout << endl << "Modes: " << endl << endl << "O -> Exit" << endl
-             << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Totally Random Board" << endl
+             << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Random Board" << endl
              << "3 -> Choose the initial Coordinates and the Words" << endl;
         cout << "Choose the mode of Board Building (Input one of the numbers above): ";
         while (1)
@@ -51,7 +51,7 @@ int main()
                 cin.ignore(1000, '\n');
                 cout << endl << "Invalid Mode!" << endl;
                 cout << endl << "Modes: " << endl << endl << "O -> Exit" << endl
-                     << "1 -> Choose the initial Coordinates for Random Words" << endl << "2 -> Totally Random Board"
+                     << "1 -> Choose the initial Coordinates for Random Words" << endl << "2 -> Random Board"
                      << endl << "3 -> Choose the initial Coordinates and the Words" << endl;
                 cout << "Choose the mode of Board Building (Input one of the numbers above): ";
             }
