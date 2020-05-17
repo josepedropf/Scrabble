@@ -26,7 +26,7 @@ using namespace std;
 // 0 -> Vertical
 // 1 -> Horizontal
 
-void ScrabbleBoard::OpenBoard(string filename)
+void ScrabbleBoard::OpenBoard(const string& filename)
 {
     gameboard.clear();
     vector <int> linepos;
