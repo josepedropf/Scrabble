@@ -7,6 +7,7 @@ void Player::GetPlayers()
 {
     while(true)
     {
+        cout << endl;
         cout << "What will be the number of players? [2-4]: ";
         cin >> nplayers;
         if (cin.fail())
