@@ -18,8 +18,6 @@ public:
     void CustomPlayerNames();
     void GetIA();
 
-private:
-
 };
 
 
