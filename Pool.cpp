@@ -1,10 +1,16 @@
 #include "Pool.h"
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <ctime>
 #include <string>
+#include <windows.h>
 using namespace std;
+
+void SetColor(unsigned int color)
+{
+    HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hcon, color);
+}
 
 void Pool::InitialPool(vector<vector <char>> gameboard, int boardsize)
 {
@@ -16,10 +22,13 @@ void Pool::InitialPool(vector<vector <char>> gameboard, int boardsize)
                 pool.push_back(gameboard[i][a]);
         }
     }
-    for (int b = 0; b < pool.size(); b++)
+    cout << "Letters in play: \n";
+    SetColor(2);
+    for (char b : pool)
     {
-        cout << endl << pool[b];
+        cout << endl << b;
     }
+    SetColor(1);
     cout << endl;
 }
 
@@ -50,11 +59,13 @@ void Pool::WritePlrPool(vector<char> plrpool, string pname)
 {
     int poolsize = plrpool.size();
     cout << endl << "Current " << pname << "'s Pool: ";
+    SetColor(2);
     for (int i = 0; i < poolsize; i++)
     {
         cout << plrpool[i] << "  ";
     }
     cout << endl;
+    SetColor(1);
 }
 
 void Pool::DrawPoolTurn(vector<char> &plrpool, int drawcount)
