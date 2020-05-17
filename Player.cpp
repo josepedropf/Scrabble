@@ -38,22 +38,27 @@ void Player::CustomPlayerNames()
             {
                 case 1:
                 {
-                    cin >> pname1;
+                    cin.ignore();
+                    getline(cin, pname1);
+                    cin.clear();
                     break;
                 }
                 case 2:
                 {
-                    cin >> pname2;
+                    getline(cin, pname2);
+                    cin.clear();
                     break;
                 }
                 case 3:
                 {
-                    cin >> pname3;
+                    getline(cin, pname3);
+                    cin.clear();
                     break;
                 }
                 case 4:
                 {
-                    cin >> pname4;
+                    getline(cin, pname4);
+                    cin.clear();
                     break;
                 }
             }
