@@ -15,7 +15,7 @@ public:
     int scorechips = 0;
     vector<vector <char>> playedl;
 
-    void OpenBoard(string filename);
+    void OpenBoard(const string& filename);
     // Make a Vector Board from a Board Text File
     void DrawGameBoard(unsigned int textcolor);
     // Draws the Game Board
