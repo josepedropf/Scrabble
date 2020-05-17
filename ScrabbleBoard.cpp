@@ -118,8 +118,8 @@ void ScrabbleBoard::SetColor(unsigned int color)
 
 void ScrabbleBoard::DrawGameBoard(unsigned int textcolor)
 {
-    unsigned int chcolor = textcolor;
-    char drawch = ' ';
+    unsigned int chcolor;
+    char drawch;
     cout << endl << "   ";
     for (int i = 0; i < boardsize; i++)
         cout << lower_letters[i] << "  ";
