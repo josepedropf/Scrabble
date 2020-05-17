@@ -71,7 +71,7 @@ void Pool::DrawPoolTurn(vector<char> &plrpool, int drawcount)
 
 void Pool::ExchangeTiles(vector<char> &plrpool)
 {
-    int tiles = 2, plrpoolindex = 0;
+    int tiles, plrpoolindex;
     if (pool.size() == 1)
         tiles = 1;
     else
