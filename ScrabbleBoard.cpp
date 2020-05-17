@@ -29,9 +29,7 @@ using namespace std;
 void ScrabbleBoard::OpenBoard(const string& filename)
 {
     gameboard.clear();
-    vector <int> linepos;
-    vector <int> colpos;
-    vector <int> orient;
+    vector <int> linepos, colpos, orient;
     vector <char> boardline;
     vector <string> words;
     string word;
