@@ -9,9 +9,9 @@ class Board {
 
 public:
     const vector <char> lower_letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-                                   'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+                                         'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
     const vector <char> upper_letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
-                                   'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+                                         'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
     void Lowerstr(string &astring);
     void Upperstr(string &astring);
     bool IsLetter(char ch);
@@ -22,9 +22,11 @@ public:
     void GetWords(vector <string> &possible_words, vector <vector<char>> gameboard);
     void Coordinates(vector <vector<char>> &gameboard, int boardsize, vector <int> npos, vector <string> possible_words,
                      int mode);
-    int WordsRange(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-                   vector <vector<char>> gameboard, vector <string> &wordsrange);
-    bool ValidOrientation(vector <int> numberpos, int n_orient, int boardsize, vector <vector<char>> gameboard);
+    int BinarySearch(vector<string> vs, int firstelem, int lastelem, char objective, int objpos);
+    int MaxRange(vector <int> numberpos, int orient, int boardsize, vector <vector<char>> gameboard);
+    vector <string> MatchingWords(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
+                    vector <vector<char>> gameboard);
+    bool ValidOrientation(vector <int> numberpos, int norient, int boardsize, vector <vector<char>> gameboard);
     bool ValidWord(vector <int> numberpos, int orient, int boardsize, vector <vector<char>> gameboard, string chosenword);
     bool AtLeastOneWord(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
                         vector <vector<char>> gameboard);
