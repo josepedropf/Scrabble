@@ -39,8 +39,6 @@ public:
     vector <vector<int>> IAPossibilities(vector <char> &plrpool);
     void IAPlayer(vector <char> &plrpool, vector <char> advpool, int &line, int &col);
 
-private:
-
 };
 
 
