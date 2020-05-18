@@ -636,9 +636,9 @@ void Board::Coordinates(vector <vector<char>> &gameboard,
 void Board::GetWords(vector <string> &possible_words, vector <vector<char>> gameboard)
 {
     fstream wordfile;
-    wordfile.open("C:\\Users\\Utilizador\\Desktop\\WORDS.TXT");
+    //wordfile.open("C:\\Users\\Utilizador\\Desktop\\WORDS.TXT");
     //wordfile.open("C:\\Users\\MSI\\Desktop\\WORDS.TXT");
-    //wordfile.open("WORDS.TXT");
+    wordfile.open("WORDS.TXT");
     string content;
 
     while(getline(wordfile, content))
