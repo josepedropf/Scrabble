@@ -513,9 +513,9 @@ void ScrabbleBoard::Logo()
             if (a == 3)
                 SetColor(4);
             else if ((a == 6 && b != 9) || a == 8)
-                SetColor(11);
-            else
                 SetColor(2);
+            else
+                SetColor(11);
             cout << drawch << "  ";
             SetColor(1);
         }
