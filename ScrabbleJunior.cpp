@@ -35,8 +35,6 @@ int main()
     Player plr;
     ScrabbleBoard sb;
     string filen;
-    //string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
-    string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
     unsigned int text_color = 1;
     int turn, turncount = 0, rranswer = 1;
     int initiald = 7, line = 0, col = 0;
@@ -59,7 +57,7 @@ int main()
             pool.charp4.clear();
         }
         cout << endl << "Welcome to Scrabble Junior!" << endl;
-        cout << "What's the name of the Board File (without .txt) : ";
+        cout << "What's the name (or path) of the Board File (without .txt) : ";
         while(true)
         {
             cin >> filen;
@@ -68,9 +66,9 @@ int main()
                 cin.clear();
                 cin.ignore(1000, '\n');
                 cout << endl << "Invalid File Name!" << endl;
-                cout << "What's the name of the Board File (without .txt) : ";
+                cout << "What's the name (or path) of the Board File (without .txt) : ";
             }
-            fstream Bfile(path + filen + ".txt");
+            fstream Bfile(filen + ".txt");
             if (Bfile.fail())
             {
                 cin.clear();
