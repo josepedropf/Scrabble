@@ -479,9 +479,7 @@ void ScrabbleBoard::IAPlayer(vector<char> &plrpool, vector<char> advpool, int &l
 
 void ScrabbleBoard::Logo()
 {
-    unsigned int textcolor = 1;
     int logosize = 15;
-    unsigned int chcolor;
     char drawch;
     vector <vector<char>> logo =    {{'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
                                      {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
@@ -508,11 +506,16 @@ void ScrabbleBoard::Logo()
         cout << upper_letters[a] << "  ";
         for (int b = 0; b < logosize; b++)
         {
-            chcolor = textcolor;
-            SetColor(chcolor);
+            SetColor(1);
             drawch = ' ';
             if (isalpha(logo[a][b]))
                 drawch = logo[a][b];
+            if (a == 3)
+                SetColor(4);
+            else if ((a == 6 && b != 9) || a == 8)
+                SetColor(11);
+            else
+                SetColor(2);
             cout << drawch << "  ";
             SetColor(1);
         }
