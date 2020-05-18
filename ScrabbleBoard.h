@@ -38,6 +38,7 @@ public:
     bool PlayPossible(vector <char> plrpool);
     vector <vector<int>> IAPossibilities(vector <char> &plrpool);
     void IAPlayer(vector <char> &plrpool, vector <char> advpool, int &line, int &col);
+    void Logo();
 
 };
 
