@@ -507,7 +507,7 @@ void Board::PlayerWord(vector <int> numberpos, int orient, int boardsize,vector 
                     break;
             }
             Lowerstr(keepdec);
-            if (keepdec == "y")
+            if (keepdec == "n")
             {
                 break;
             }
