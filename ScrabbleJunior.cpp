@@ -35,8 +35,8 @@ int main()
     Player plr;
     ScrabbleBoard sb;
     string filen;
-    //string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
-    string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
+    string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
+    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
     unsigned int text_color = 1;
     int turn, turncount = 0, rranswer = 1;
     int initiald = 7, line = 0, col = 0;
@@ -239,20 +239,76 @@ int main()
             if (sb.scorechips == 0)
                 playing = false;
         }
-        vector <int> points;
-        points.push_back(plr.scorep1);
-        points.push_back(plr.scorep2);
+
+        string fplayername, winnername;
+        bool draw = false;
+        vector <string> places = {"First Place:  ", "Second Place: ", "Third Place:  ", "Fourth Place: "};
+        vector <vector<int>> points;
+        plr.fscorep1 = {1, plr.scorep1};
+        plr.fscorep2 = {2, plr.scorep2};
+        plr.fscorep3 = {3, plr.scorep3};
+        plr.fscorep4 = {4, plr.scorep4};
+        points.push_back(plr.fscorep1);
+        points.push_back(plr.fscorep2);
         if (plr.nplayers >= 3)
-            points.push_back(plr.scorep3);
+            points.push_back(plr.fscorep3);
         if (plr.nplayers >= 4)
-            points.push_back(plr.scorep4);
-        sort(points.begin(), points.end());
-        cout << endl << "Points: ";
-        for (int point : points)
+            points.push_back(plr.fscorep4);
+
+        sort(points.begin(), points.end(), [] (const vector <int> &v1, const vector <int> &v2)
         {
-            cout << point << "   ";
+            return v1[1] > v2[1];
+        });
+
+        for (int i = 0; i <points.size() - 1; i++)
+        {
+           if (points[i][1] == points[i + 1][1])
+               places[i + 1] = places[i];
         }
-        cout << endl << endl << "END";
+
+        for (int i = 0; i < points.size(); i++)
+        {
+            switch (points[i][0])
+            {
+                case 1:
+                {
+                    fplayername = plr.pname1;
+                    break;
+                }
+                case 2:
+                {
+                    fplayername = plr.pname2;
+                    break;
+                }
+                case 3:
+                {
+                    fplayername = plr.pname3;
+                    break;
+                }
+                case 4:
+                {
+                    fplayername = plr.pname4;
+                    break;
+                }
+            }
+
+            if (i == 0)
+                winnername = fplayername;
+            cout << endl << places[i] << fplayername << " with " << points[i][1] << " Points." << endl;
+        }
+
+        if (places[0] == places[1])
+            draw = true;
+        else
+            draw = false;
+
+        if (!draw)
+        {
+            cout << endl << "---------------  " << winnername << " WINS!!!" << "  ---------------" << endl;
+        }
+        else
+            cout << endl << "---------------  " << "DRAW" << "  ---------------" << endl;
+        cout << endl << "END";
 
         while(true)
         {
