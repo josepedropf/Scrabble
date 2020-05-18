@@ -147,7 +147,7 @@ bool Board::ValidWord(vector <int> numberpos, int orient, int boardsize, vector 
     Upperstr(chosenword);
     if (gameboard[numberpos[0]][numberpos[1]] == '2' || gameboard[numberpos[0]][numberpos[1]] == '3')
     {
-        // << endl << "CC" << endl;
+        //cout << endl << "CC" << endl;
         return false;
     }
     for (int i = 0; i < chosenword.size(); i++)
@@ -289,7 +289,6 @@ vector <string> Board::MatchingWords(vector <int> numberpos, int orient, int boa
         {
             //cout << criteria[c] << " ";
         }
-        cout << endl;
 
         for (auto & possible_word : possible_words)
         {
@@ -655,16 +654,16 @@ void Board::DrawBoard(int boardsize, vector <vector<char>> gameboard)
     //cout << "   ";
     for (int i = 0; i < boardsize; i++)
         //cout << lower_letters[i] << "  ";
-    //cout << endl;
-    for (int a = 0; a < boardsize; a++)
-    {
-        //cout << upper_letters[a] << "  ";
-        for (int b = 0; b < boardsize; b++)
-        {
-            //cout << gameboard[a][b] << "  ";
-        }
         //cout << endl;
-    }
+        for (int a = 0; a < boardsize; a++)
+        {
+            //cout << upper_letters[a] << "  ";
+            for (int b = 0; b < boardsize; b++)
+            {
+                //cout << gameboard[a][b] << "  ";
+            }
+            //cout << endl;
+        }
     //cout << endl;
 }
 
