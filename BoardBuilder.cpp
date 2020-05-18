@@ -36,7 +36,7 @@ int main()
             gameboard.push_back(line);
         }
 
-        board.DrawBoard(boardsize, gameboard);
+        board.DrawBoardClean(boardsize, gameboard);
 
         cout << endl << "Modes: " << endl << endl << "O -> Exit" << endl
              << "1 -> Choose the initial coordinates for Random Words" << endl << "2 -> Random Board" << endl
