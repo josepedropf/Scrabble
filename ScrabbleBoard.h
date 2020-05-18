@@ -29,7 +29,7 @@ public:
     bool ValidLetter(int line, int col, vector <char> &plrpool);
     int GetLine(string scoord);
     int GetCol(string scoord);
-    string StringCoord();
+    string StringCoord(bool &forceend, bool &playing);
     bool CompCheckLeft(int line, int col);
     bool CompCheckRight(int line, int col);
     bool CompCheckUp(int line, int col);
