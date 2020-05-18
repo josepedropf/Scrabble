@@ -34,9 +34,7 @@ void ScrabbleBoard::OpenBoard(const string& filename)
     vector <string> words;
     string word;
     ifstream boardfile;
-    string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
-    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
-    string txtfilename = path + filename + ".txt";
+    string txtfilename = filename + ".txt";
     boardfile.open(txtfilename);
     string line;
     getline(boardfile, line);
