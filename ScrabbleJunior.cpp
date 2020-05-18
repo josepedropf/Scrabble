@@ -39,7 +39,7 @@ int main()
     int turn, turncount = 0, rranswer = 1;
     int initiald = 7, line = 0, col = 0;
     string scoord;
-    bool playing = true, validp, rr = true;
+    bool playing = true, validp, rr = true, forceend = false;
     sb.SetColor(text_color);
     while (rr)
     {
@@ -48,6 +48,7 @@ int main()
             plr.scorep1 = plr.scorep2 = plr.scorep3 = plr.scorep4 = 0;
             sb.gameboard.clear();
             playing = true;
+            forceend = false;
             sb.playedl.clear();
             sb.scorechips = 0;
             pool.pool.clear();
@@ -56,8 +57,8 @@ int main()
             pool.charp3.clear();
             pool.charp4.clear();
         }
-        cout << endl << "Welcome to Scrabble Junior!" << endl;
-        cout << "What's the name (or path) of the Board File (without .txt) : ";
+        sb.Logo();
+        cout << endl << "What's the path and name of the Board File (without .txt) : ";
         while(true)
         {
             cin >> filen;
@@ -66,7 +67,7 @@ int main()
                 cin.clear();
                 cin.ignore(1000, '\n');
                 cout << endl << "Invalid File Name!" << endl;
-                cout << "What's the name (or path) of the Board File (without .txt) : ";
+                cout << "What's the name of the Board File (without .txt) : ";
             }
             fstream Bfile(filen + ".txt");
             if (Bfile.fail())
@@ -166,7 +167,6 @@ int main()
                     break;
                 }
             }
-
             cout << endl << "------------  " << playername << "'s TURN  " << "------------" << endl;
             cout << playername << "'s SCORE: " << playerscore << endl;
             cout << "scorechips: " << sb.scorechips << endl;
@@ -183,7 +183,7 @@ int main()
                         sb.IAPlayer(playerpool, adversariepool, line, col);
                     else
                     {
-                        scoord = sb.StringCoord();
+                        scoord = sb.StringCoord(forceend, playing);
                         line = sb.GetLine(scoord);
                         col = sb.GetCol(scoord);
                     }
@@ -240,83 +240,87 @@ int main()
                 playing = false;
         }
 
-        string fplayername, winnername;
-        bool draw = false;
-        vector <string> places = {"First Place:  ", "Second Place: ", "Third Place:  ", "Fourth Place: "};
-        vector <vector<int>> points;
-        plr.fscorep1 = {1, plr.scorep1};
-        plr.fscorep2 = {2, plr.scorep2};
-        plr.fscorep3 = {3, plr.scorep3};
-        plr.fscorep4 = {4, plr.scorep4};
-        points.push_back(plr.fscorep1);
-        points.push_back(plr.fscorep2);
-        if (plr.nplayers >= 3)
-            points.push_back(plr.fscorep3);
-        if (plr.nplayers >= 4)
-            points.push_back(plr.fscorep4);
-
-        sort(points.begin(), points.end(), [] (const vector <int> &v1, const vector <int> &v2)
+        if (!forceend)
         {
-            return v1[1] > v2[1];
-        });
+            string fplayername, winnername;
+            bool draw = false;
+            vector <string> places = {"First Place:  ", "Second Place: ", "Third Place:  ", "Fourth Place: "};
+            vector <vector<int>> points;
+            plr.fscorep1 = {1, plr.scorep1};
+            plr.fscorep2 = {2, plr.scorep2};
+            plr.fscorep3 = {3, plr.scorep3};
+            plr.fscorep4 = {4, plr.scorep4};
+            points.push_back(plr.fscorep1);
+            points.push_back(plr.fscorep2);
+            if (plr.nplayers >= 3)
+                points.push_back(plr.fscorep3);
+            if (plr.nplayers >= 4)
+                points.push_back(plr.fscorep4);
 
-        for (int i = 0; i <points.size() - 1; i++)
-        {
-            if (points[i][1] == points[i + 1][1])
-                places[i + 1] = places[i];
-        }
-
-        for (int i = 0; i < points.size(); i++)
-        {
-            switch (points[i][0])
+            sort(points.begin(), points.end(), [] (const vector <int> &v1, const vector <int> &v2)
             {
-                case 1:
-                {
-                    fplayername = plr.pname1;
-                    break;
-                }
-                case 2:
-                {
-                    fplayername = plr.pname2;
-                    break;
-                }
-                case 3:
-                {
-                    fplayername = plr.pname3;
-                    break;
-                }
-                case 4:
-                {
-                    fplayername = plr.pname4;
-                    break;
-                }
+                return v1[1] > v2[1];
+            });
+
+            for (int i = 0; i <points.size() - 1; i++)
+            {
+                if (points[i][1] == points[i + 1][1])
+                    places[i + 1] = places[i];
             }
 
-            if (i == 0)
-                winnername = fplayername;
-            cout << endl << places[i];
-            sb.SetColor(4);
-            cout << fplayername;
-            sb.SetColor(1);
-            cout << " with ";
-            sb.SetColor(4);
-            cout << points[i][1];
-            sb.SetColor(1);
-            cout << " Points." << endl;
+            for (int i = 0; i < points.size(); i++)
+            {
+                switch (points[i][0])
+                {
+                    case 1:
+                    {
+                        fplayername = plr.pname1;
+                        break;
+                    }
+                    case 2:
+                    {
+                        fplayername = plr.pname2;
+                        break;
+                    }
+                    case 3:
+                    {
+                        fplayername = plr.pname3;
+                        break;
+                    }
+                    case 4:
+                    {
+                        fplayername = plr.pname4;
+                        break;
+                    }
+                }
+
+                if (i == 0)
+                    winnername = fplayername;
+                cout << endl << places[i];
+                sb.SetColor(4);
+                cout << fplayername;
+                sb.SetColor(1);
+                cout << " with ";
+                sb.SetColor(4);
+                cout << points[i][1];
+                sb.SetColor(1);
+                cout << " Points." << endl;
+            }
+
+            draw = places[0] == places[1];
+
+            if (!draw)
+            {
+                cout << endl << "---------------  ";
+                sb.SetColor(4);
+                cout << winnername;
+                sb.SetColor(1);
+                cout << " WINS!!!" << "  ---------------" << endl;
+            }
+            else
+                cout << endl << "---------------  " << "DRAW" << "  ---------------" << endl;
         }
 
-        draw = places[0] == places[1];
-
-        if (!draw)
-        {
-            cout << endl << "---------------  ";
-            sb.SetColor(4);
-            cout << winnername;
-            sb.SetColor(1);
-            cout << " WINS!!!" << "  ---------------" << endl;
-        }
-        else
-            cout << endl << "---------------  " << "DRAW" << "  ---------------" << endl;
         cout << endl << "END";
 
         while(true)
