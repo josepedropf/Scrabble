@@ -58,7 +58,11 @@ void Pool::InitialDraw(int ndraw, int np)
 void Pool::WritePlrPool(vector<char> plrpool, string pname)
 {
     int poolsize = plrpool.size();
-    cout << endl << "Current " << pname << "'s Pool: ";
+    cout << endl << "Current ";
+    SetColor(11);
+    cout << pname;
+    SetColor(1);
+    cout << "'s Pool: ";
     SetColor(2);
     for (int i = 0; i < poolsize; i++)
     {
