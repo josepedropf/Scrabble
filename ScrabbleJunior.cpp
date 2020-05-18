@@ -35,8 +35,8 @@ int main()
     Player plr;
     ScrabbleBoard sb;
     string filen;
-    string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
-    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
+    //string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
+    string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
     unsigned int text_color = 1;
     int turn, turncount = 0, rranswer = 1;
     int initiald = 7, line = 0, col = 0;
@@ -262,8 +262,8 @@ int main()
 
         for (int i = 0; i <points.size() - 1; i++)
         {
-           if (points[i][1] == points[i + 1][1])
-               places[i + 1] = places[i];
+            if (points[i][1] == points[i + 1][1])
+                places[i + 1] = places[i];
         }
 
         for (int i = 0; i < points.size(); i++)
@@ -294,17 +294,26 @@ int main()
 
             if (i == 0)
                 winnername = fplayername;
-            cout << endl << places[i] << fplayername << " with " << points[i][1] << " Points." << endl;
+            cout << endl << places[i];
+            sb.SetColor(4);
+            cout << fplayername;
+            sb.SetColor(1);
+            cout << " with ";
+            sb.SetColor(4);
+            cout << points[i][1];
+            sb.SetColor(1);
+            cout << " Points." << endl;
         }
 
-        if (places[0] == places[1])
-            draw = true;
-        else
-            draw = false;
+        draw = places[0] == places[1];
 
         if (!draw)
         {
-            cout << endl << "---------------  " << winnername << " WINS!!!" << "  ---------------" << endl;
+            cout << endl << "---------------  ";
+            sb.SetColor(4);
+            cout << winnername;
+            sb.SetColor(1);
+            cout << " WINS!!!" << "  ---------------" << endl;
         }
         else
             cout << endl << "---------------  " << "DRAW" << "  ---------------" << endl;
