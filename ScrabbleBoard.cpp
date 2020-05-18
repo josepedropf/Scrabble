@@ -34,7 +34,9 @@ void ScrabbleBoard::OpenBoard(const string& filename)
     vector <string> words;
     string word;
     ifstream boardfile;
-    string txtfilename = filename + ".txt";
+    string path = "C:\\Users\\MSI\\CLionProjects\\BoardBuilder\\cmake-build-debug\\";
+    //string path = "C:\\Users\\Utilizador\\CLionProjects\\ScrabbleBoardBuilder\\cmake-build-debug\\";
+    string txtfilename = path + filename + ".txt";
     boardfile.open(txtfilename);
     string line;
     getline(boardfile, line);
@@ -278,19 +280,24 @@ int ScrabbleBoard::GetCol(string scoord)
 }
 
 
-string ScrabbleBoard::StringCoord()
+string ScrabbleBoard::StringCoord(bool &forceend, bool &playing)
 {
     string sc;
     while (true)
     {
-
         cout << endl << "Coordinates must be indicated with one Capital Letter Followed by one Lowercase Letter according to the Board." << endl;
-        cout << "Introduce the Coordinates: ";
+        cout << "Introduce the Coordinates [or <end> if you want to quit]: ";
         cin >> sc;
         if (cin.fail())
         {
             cin.clear();
             cin.ignore(1000, '\n');
+        }
+        else if (sc == "end")
+        {
+            forceend = true;
+            playing = false;
+            break;
         }
         else if (sc.size() != 2)
         {
@@ -471,3 +478,48 @@ void ScrabbleBoard::IAPlayer(vector<char> &plrpool, vector<char> advpool, int &l
     line = pplays[bestplay][0];
     col = pplays[bestplay][1];
 }
+
+void ScrabbleBoard::Logo()
+{
+    unsigned int textcolor = 1;
+    int logosize = 15;
+    unsigned int chcolor;
+    char drawch;
+    vector <vector<char>> logo =    {{'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
+                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
+                                     {'0', '0', 'F', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
+                                     {'S', 'C', 'R', 'A', 'B', 'B', 'L', 'E', '0', 'J', 'U', 'N', 'I', 'O', 'R'},
+                                     {'0', '0', 'E', '0', '0', '0', '0', '0', '0', 'O', '0', '0', '0', '0', '0'},
+                                     {'0', '0', 'D', '0', '0', '0', '0', '0', '0', 'S', '0', '0', '0', '0', '0'},
+                                     {'0', 'F', 'E', 'U', 'P', '0', '0', '0', '0', 'E', '0', '0', '0', '0', '0'},
+                                     {'0', '0', 'R', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
+                                     {'0', 'M', 'I', 'E', 'I', 'C', '0', '0', '0', 'P', 'R', 'O', 'G', '0', '0'},
+                                     {'0', '0', 'C', '0', '0', '0', '0', '0', '0', 'E', '0', '0', '0', '0', '0'},
+                                     {'0', '0', 'O', '0', '0', '0', '0', '0', '0', 'D', '0', '0', '0', '0', '0'},
+                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', 'R', '0', '0', '0', '0', '0'},
+                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', 'O', '0', '0', '0', '0', '0'},
+                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
+                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}};
+    cout << "Welcome to " << endl;
+    cout << endl << "   ";
+    for (int i = 0; i < logosize; i++)
+        cout << lower_letters[i] << "  ";
+    cout << endl;
+    for (int a = 0; a < logosize; a++)
+    {
+        cout << upper_letters[a] << "  ";
+        for (int b = 0; b < logosize; b++)
+        {
+            chcolor = textcolor;
+            SetColor(chcolor);
+            drawch = ' ';
+            if (isalpha(logo[a][b]))
+                drawch = logo[a][b];
+            cout << drawch << "  ";
+            SetColor(1);
+        }
+        cout << endl;
+    }
+    cout << endl << endl;
+}
+
