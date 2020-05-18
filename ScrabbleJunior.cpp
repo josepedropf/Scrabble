@@ -47,8 +47,10 @@ int main()
     {
         if (rranswer == 0)
         {
+            plr.scorep1 = plr.scorep2 = plr.scorep3 = plr.scorep4 = 0;
             sb.gameboard.clear();
             playing = true;
+            sb.playedl.clear();
             sb.scorechips = 0;
             pool.pool.clear();
             pool.charp1.clear();
