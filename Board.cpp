@@ -65,8 +65,8 @@ bool Board::EmptySpot(vector <vector<char>> gameboard, int boardsize)
             if (gameboard[i][a] == '0' || gameboard[i][a] == '4' || gameboard[i][a] == '5')
                 return true;
             else if (i < boardsize - 1 && a < boardsize - 1 && (IsLetter(gameboard[i][a]) &&
-            (gameboard[i + 1][a] == '0' || gameboard[i + 1][a] == '3' || gameboard[i + 1][a] == '5') ||
-            (gameboard[i][a + 1] == '0' || gameboard[i][a + 1] == '2' || gameboard[i][a + 1] == '4')))
+                                                                (gameboard[i + 1][a] == '0' || gameboard[i + 1][a] == '3' || gameboard[i + 1][a] == '5') ||
+                                                                (gameboard[i][a + 1] == '0' || gameboard[i][a + 1] == '2' || gameboard[i][a + 1] == '4')))
                 return true;
         }
     }
@@ -116,8 +116,8 @@ bool Board::ValidOrientation(vector <int> numberpos, int norient, int boardsize,
         if (IsLetter(gameboard[numberpos[0]][numberpos[1]]))
         {
             if (numberpos[0] == boardsize - 1 || IsLetter(gameboard[numberpos[0] + 1][numberpos[1]]) ||
-            gameboard[numberpos[0] + 1][numberpos[1]] == '1' ||
-            gameboard[numberpos[0] + 1][numberpos[1]] == '2' || gameboard[numberpos[0] + 1][numberpos[1]] == '4')
+                gameboard[numberpos[0] + 1][numberpos[1]] == '1' ||
+                gameboard[numberpos[0] + 1][numberpos[1]] == '2' || gameboard[numberpos[0] + 1][numberpos[1]] == '4')
                 return false;
         }
         return true;
@@ -131,8 +131,8 @@ bool Board::ValidOrientation(vector <int> numberpos, int norient, int boardsize,
         if (IsLetter(gameboard[numberpos[0]][numberpos[1]]))
         {
             if (numberpos[1] == boardsize - 1 || IsLetter(gameboard[numberpos[0]][numberpos[1] + 1]) ||
-            gameboard[numberpos[0]][numberpos[1] + 1] == '1' ||
-            gameboard[numberpos[0]][numberpos[1] + 1] == '3' || gameboard[numberpos[0]][numberpos[1] + 1] == '5')
+                gameboard[numberpos[0]][numberpos[1] + 1] == '1' ||
+                gameboard[numberpos[0]][numberpos[1] + 1] == '3' || gameboard[numberpos[0]][numberpos[1] + 1] == '5')
                 return false;
         }
         return true;
@@ -142,12 +142,12 @@ bool Board::ValidOrientation(vector <int> numberpos, int norient, int boardsize,
 bool Board::ValidWord(vector <int> numberpos, int orient, int boardsize, vector <vector<char>> gameboard,
                       string chosenword)
 {
-    cout << endl << "VW" << endl;
-    cout << chosenword << endl;
+    //cout << endl << "VW" << endl;
+    //cout << chosenword << endl;
     Upperstr(chosenword);
     if (gameboard[numberpos[0]][numberpos[1]] == '2' || gameboard[numberpos[0]][numberpos[1]] == '3')
     {
-        cout << endl << "CC" << endl;
+        // << endl << "CC" << endl;
         return false;
     }
     for (int i = 0; i < chosenword.size(); i++)
@@ -161,17 +161,17 @@ bool Board::ValidWord(vector <int> numberpos, int orient, int boardsize, vector 
                 {
                     if (chosenword[i] != gameboard[numberpos[0] + i][numberpos[1]])
                     {
-                        cout << endl << "C0.1" << endl;
+                        //cout << endl << "C0.1" << endl;
                         return false;
                     }
                 }
                 if (numberpos[0] + chosenword.size() < boardsize)
                 {
                     if (IsLetter(gameboard[numberpos[0] + chosenword.size()][numberpos[1]]))
-                        {
-                            cout << endl << "C0.2" << endl;
-                            return false;
-                        }
+                    {
+                        //cout << endl << "C0.2" << endl;
+                        return false;
+                    }
                 }
                 break;
             }
@@ -182,7 +182,7 @@ bool Board::ValidWord(vector <int> numberpos, int orient, int boardsize, vector 
                 {
                     if (chosenword[i] != gameboard[numberpos[0]][numberpos[1] + i])
                     {
-                        cout << endl << "C1.1" << endl;
+                        //cout << endl << "C1.1" << endl;
                         return false;
                     }
                 }
@@ -190,7 +190,7 @@ bool Board::ValidWord(vector <int> numberpos, int orient, int boardsize, vector 
                 {
                     if (IsLetter(gameboard[numberpos[0]][numberpos[1] + chosenword.size()]))
                     {
-                        cout << endl << "C1.2" << endl;
+                        //cout << endl << "C1.2" << endl;
                         return false;
                     }
                 }
@@ -244,14 +244,14 @@ int Board::MaxRange(vector<int> numberpos, int orient, int boardsize, vector<vec
             }
         }
     }
-    cout << endl << "Max Range: " << maxrange << endl;
+    //cout << endl << "Max Range: " << maxrange << endl;
     return maxrange;
 }
 
 vector <string> Board::MatchingWords(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
-                      vector <vector<char>> gameboard)
+                                     vector <vector<char>> gameboard)
 {
-    cout << endl << "MW" << endl;
+    //cout << endl << "MW" << endl;
     vector <string> matchwords;
     int maxrange = MaxRange(numberpos, orient, boardsize, gameboard);
     bool match = true;
@@ -284,10 +284,10 @@ vector <string> Board::MatchingWords(vector <int> numberpos, int orient, int boa
             }
         }
 
-        cout << endl << "Criteria:  ";
+        //cout << endl << "Criteria:  ";
         for (int c = 0; c < criteria.size(); c++)
         {
-            cout << criteria[c] << " ";
+            //cout << criteria[c] << " ";
         }
         cout << endl;
 
@@ -312,7 +312,7 @@ vector <string> Board::MatchingWords(vector <int> numberpos, int orient, int boa
 bool Board::AtLeastOneWord(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
                            vector <vector<char>> gameboard)
 {
-    cout << endl << "ALOW" << endl;
+    //cout << endl << "ALOW" << endl;
     vector <string> worange;
     worange = MatchingWords(numberpos, orient, boardsize, possible_words, gameboard);
     if (worange.size() == 0)
@@ -336,9 +336,9 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
     string chword;
     vector<string> matchingw;
     matchingw = MatchingWords(numberpos, orient, boardsize, possible_words, gameboard);
-    cout << endl << "GRW" << endl;
+    //cout << endl << "GRW" << endl;
     int mwsize = 0, section = 0;
-    cout << endl << "Matching Words Size: " << matchingw.size() << endl;
+    //cout << endl << "Matching Words Size: " << matchingw.size() << endl;
     while (true)
     {
         srand(time(0));
@@ -351,7 +351,7 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
 
         if (ValidWord(numberpos, orient, boardsize, gameboard, chword))
             break;
-         else
+        else
             matchingw.erase(matchingw.begin() + word_index);
     }
     //cout << "Selected Word: " << chword << endl;
@@ -361,7 +361,7 @@ string Board::GetRandomWord(vector <int> numberpos, int orient, int boardsize, v
 void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
                        vector <vector<char>> &gameboard, string chword)
 {
-    cout << endl << "WP" << endl;
+    //cout << endl << "WP" << endl;
     Upperstr(chword);
     if (orient == 0)
         chorient.push_back('V');
@@ -408,7 +408,7 @@ void Board::WordPlacer(vector <int> numberpos, int orient, int boardsize, vector
                 {
                     if (gameboard[numberpos[0] + i][numberpos[1] + 1] != '3'
                         && gameboard[numberpos[0] + i][numberpos[1] + 1] != '5' &&
-                            gameboard[numberpos[0] + i][numberpos[1] + 1] != '1')
+                        gameboard[numberpos[0] + i][numberpos[1] + 1] != '1')
                         gameboard[numberpos[0] + i][numberpos[1] + 1] = '2';
                     else
                         gameboard[numberpos[0] + i][numberpos[1] + 1] = '1';
@@ -469,8 +469,8 @@ void Board::RandomWordPlacement(vector <int> numberpos, int orient, int boardsiz
         ori = "V";
     else
         ori ="H";
-    cout << endl << "Position: " << numberpos[0] << ", " << numberpos[1] << "   Orientation: " << ori;
-    cout << endl << "Chosen Word: " << chosenw << endl;
+    //cout << endl << "Position: " << numberpos[0] << ", " << numberpos[1] << "   Orientation: " << ori;
+    //cout << endl << "Chosen Word: " << chosenw << endl;
     WordPlacer(numberpos, orient, boardsize, possible_words, gameboard, chosenw);
 }
 
@@ -480,7 +480,7 @@ void Board::PlayerWord(vector <int> numberpos, int orient, int boardsize,vector 
     string playerw, keepdec;
     vector <string> worange;
     cout << endl << "Please Introduce a Word (maximum number of letters: " <<
-    MaxRange(numberpos, orient, boardsize, gameboard) << ") -> " ;
+         MaxRange(numberpos, orient, boardsize, gameboard) << ") -> " ;
     while(1)
     {
         cin >> playerw;
@@ -513,7 +513,7 @@ void Board::PlayerWord(vector <int> numberpos, int orient, int boardsize,vector 
             else
             {
                 cout << endl << "Please Introduce a Word (maximum number of letters: " <<
-                MaxRange(numberpos, orient, boardsize, gameboard) << ") -> " ;
+                     MaxRange(numberpos, orient, boardsize, gameboard) << ") -> " ;
             }
         }
         else
@@ -652,20 +652,20 @@ void Board::GetWords(vector <string> &possible_words, vector <vector<char>> game
 
 void Board::DrawBoard(int boardsize, vector <vector<char>> gameboard)
 {
-    cout << "   ";
+    //cout << "   ";
     for (int i = 0; i < boardsize; i++)
-        cout << lower_letters[i] << "  ";
-    cout << endl;
+        //cout << lower_letters[i] << "  ";
+    //cout << endl;
     for (int a = 0; a < boardsize; a++)
     {
-        cout << upper_letters[a] << "  ";
+        //cout << upper_letters[a] << "  ";
         for (int b = 0; b < boardsize; b++)
         {
-            cout << gameboard[a][b] << "  ";
+            //cout << gameboard[a][b] << "  ";
         }
-        cout << endl;
+        //cout << endl;
     }
-    cout << endl;
+    //cout << endl;
 }
 
 void Board::DrawBoardClean(int boardsize,  vector <vector<char>> gameboard)
@@ -744,10 +744,10 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
                 npos = {line, col};
             }
             if (!ValidPos(npos, boardsize, gameboard) ||
-            (!AtLeastOneWord(npos, 0, boardsize, possible_words, gameboard) &&
-            !AtLeastOneWord(npos, 1, boardsize, possible_words, gameboard)))
+                (!AtLeastOneWord(npos, 0, boardsize, possible_words, gameboard) &&
+                 !AtLeastOneWord(npos, 1, boardsize, possible_words, gameboard)))
             {
-                cout << endl << "Eliminated: " << allpos[randpos][0] << ", " << allpos[randpos][1] << endl;
+                //cout << endl << "Eliminated: " << allpos[randpos][0] << ", " << allpos[randpos][1] << endl;
                 allpos.erase(allpos.begin() + randpos);
             }
             else
@@ -756,7 +756,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
                 randomor = rand() % 2;
                 if (ValidOrientation(npos, randomor, boardsize, gameboard))
                 {
-                    cout << endl << "TestPosition: " << allpos[randpos][0] << ", " << allpos[randpos][1] << "   TestOri: " << randomor <<endl;
+                    //cout << endl << "TestPosition: " << allpos[randpos][0] << ", " << allpos[randpos][1] << "   TestOri: " << randomor <<endl;
                     RandomWordPlacement(npos, randomor, boardsize, possible_words, gameboard);
                     validword = true;
                 }
@@ -768,7 +768,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
                         randomor = 0;
                     if (ValidOrientation(npos, randomor, boardsize, gameboard))
                     {
-                        cout << endl << "TestPosition: " << allpos[randpos][0] << ", " << allpos[randpos][1] << "   TestOri: " << randomor <<endl;
+                        //cout << endl << "TestPosition: " << allpos[randpos][0] << ", " << allpos[randpos][1] << "   TestOri: " << randomor <<endl;
                         RandomWordPlacement(npos, randomor, boardsize, possible_words, gameboard);
                         validword = true;
                     }
