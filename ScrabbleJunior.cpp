@@ -58,7 +58,7 @@ int main()
             pool.charp4.clear();
         }
         sb.Logo();
-        cout << endl << "What's the path and name of the Board File (without .txt) : ";
+        cout << endl << "What's the path or name of the Board File (without .txt) : ";
         while(true)
         {
             cin >> filen;
