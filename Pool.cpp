@@ -12,7 +12,7 @@ void SetColor(unsigned int color)
     SetConsoleTextAttribute(hcon, color);
 }
 
-void Pool::InitialPool(vector<vector <char>> gameboard, int boardsize)
+void Pool::InitialPool(vector<vector <char>> gameboard, int boardsize, unsigned int color1, unsigned int color2)
 {
     for (int i = 0; i < boardsize; i++)
     {
@@ -23,12 +23,12 @@ void Pool::InitialPool(vector<vector <char>> gameboard, int boardsize)
         }
     }
     cout << "Letters in play: \n";
-    SetColor(2);
+    SetColor(color2);
     for (char b : pool)
     {
         cout << endl << b;
     }
-    SetColor(1);
+    SetColor(color1);
     cout << endl;
 }
 
@@ -55,21 +55,21 @@ void Pool::InitialDraw(int ndraw, int np)
     }
 }
 
-void Pool::WritePlrPool(vector<char> plrpool, string pname)
+void Pool::WritePlrPool(vector<char> plrpool, string pname, unsigned int color1, unsigned int color2)
 {
     int poolsize = plrpool.size();
     cout << endl << "Current ";
     SetColor(11);
     cout << pname;
-    SetColor(1);
+    SetColor(color1);
     cout << "'s Pool: ";
-    SetColor(2);
+    SetColor(color2);
     for (int i = 0; i < poolsize; i++)
     {
         cout << plrpool[i] << "  ";
     }
     cout << endl;
-    SetColor(1);
+    SetColor(color1);
 }
 
 void Pool::DrawPoolTurn(vector<char> &plrpool, int drawcount)
