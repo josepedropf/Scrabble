@@ -1,4 +1,3 @@
-
 #include <string>
 #include <vector>
 #ifndef SCRABBLEJUNIOR_POOL_H
