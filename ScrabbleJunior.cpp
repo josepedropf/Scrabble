@@ -35,12 +35,12 @@ int main()
     Player plr;
     ScrabbleBoard sb;
     string filen;
-    unsigned int text_color = 1;
+    unsigned int mtextcolor = 1, stextcolor = 2;
     int turn, turncount = 0, rranswer = 1;
     int initiald = 7, line = 0, col = 0;
     string scoord;
     bool playing = true, validp, rr = true, forceend = false;
-    sb.SetColor(text_color);
+    sb.SetColor(mtextcolor);
     while (rr)
     {
         if (rranswer == 0)
@@ -81,8 +81,9 @@ int main()
                 break;
         }
         sb.OpenBoard(filen);
-        sb.DrawGameBoard(2);
-        pool.InitialPool(sb.gameboard, sb.boardsize);
+        sb.DrawGameBoard(mtextcolor, stextcolor);
+        pool.InitialPool(sb.gameboard, sb.boardsize, mtextcolor, stextcolor);
+        sb.CustomizeColor(mtextcolor, stextcolor);
         plr.GetPlayers();
         plr.GetIA();
         int cn = 1;
@@ -168,22 +169,22 @@ int main()
                 }
             }
             cout << endl << "------------  ";
-            sb.SetColor(11);
+            sb.SetColor(stextcolor);
             cout << playername;
-            sb.SetColor(1);
+            sb.SetColor(mtextcolor);
             cout << "'s TURN  " << "------------" << endl;
-            sb.SetColor(11);
+            sb.SetColor(stextcolor);
             cout << playername;
-            sb.SetColor(1);
+            sb.SetColor(mtextcolor);
             cout << "'s SCORE: " << playerscore << endl;
             cout << "scorechips: " << sb.scorechips << endl;
-            sb.DrawGameBoard(2);
-            pool.WritePlrPool(playerpool, playername);
+            sb.DrawGameBoard(mtextcolor, stextcolor);
+            pool.WritePlrPool(playerpool, playername, mtextcolor, stextcolor);
             while (turncount < 2 && sb.PlayPossible(playerpool))
             {
                 validp = false;
-                sb.DrawGameBoard(2);
-                pool.WritePlrPool(playerpool, playername);
+                sb.DrawGameBoard(mtextcolor, stextcolor);
+                pool.WritePlrPool(playerpool, playername, mtextcolor, stextcolor);
                 while (playing && !validp)
                 {
                     if (isia)
@@ -304,13 +305,13 @@ int main()
                 if (i == 0)
                     winnername = fplayername;
                 cout << endl << places[i];
-                sb.SetColor(11);
+                sb.SetColor(stextcolor);
                 cout << fplayername;
-                sb.SetColor(1);
+                sb.SetColor(mtextcolor);
                 cout << " with ";
-                sb.SetColor(11);
+                sb.SetColor(stextcolor);
                 cout << points[i][1];
-                sb.SetColor(1);
+                sb.SetColor(mtextcolor);
                 cout << " Points." << endl;
             }
 
@@ -319,9 +320,9 @@ int main()
             if (!draw)
             {
                 cout << endl << "---------------  ";
-                sb.SetColor(11);
+                sb.SetColor(stextcolor);
                 cout << winnername;
-                sb.SetColor(1);
+                sb.SetColor(mtextcolor);
                 cout << " WINS!!!" << "  ---------------" << endl;
             }
             else
