@@ -112,7 +112,65 @@ void ScrabbleBoard::SetColor(unsigned int color)
     SetConsoleTextAttribute(hcon, color);
 }
 
-void ScrabbleBoard::DrawGameBoard(unsigned int textcolor)
+void ScrabbleBoard::DrawColorList()
+{
+    cout << endl << "Color List: " << endl;
+    cout << endl << "Black -> 0" << endl << "Blue -> 1" << endl << "Green -> 2" << endl << "Cyan -> 3" <<
+    endl << "Magenta -> 5" << endl << "Brown -> 6" << endl << "Light Gray -> 7" << endl << "Dark Gray -> 8" <<
+    endl << "Light Blue -> 9" << endl << "Light Green -> 10" << endl << "Light Cyan -> 11" <<
+    endl << "Light Magenta -> 13" << endl << "Yellow -> 14" << endl << "White -> 15" << endl;
+}
+
+void ScrabbleBoard::CustomizeColor(unsigned int &color1, unsigned int &color2)
+{
+    int custc = 0;
+    while(true)
+    {
+        cout << endl << "Do you want to customize the game's colors? [0 for No || Any other number for Yes] ";
+        cin >> custc;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << endl << "Invalid Answer (it has to be a Number)! " << endl;
+        }
+        else
+            break;
+    }
+    if (custc != 0)
+    {
+        while (true)
+        {
+            DrawColorList();
+            cout << endl << "Customizing Main Color. Choose a Color from the List Above!" << endl;
+            cin >> color1;
+            if (cin.fail() || color1 == 4 || color1 == 12 || color1 < 0 || color1 > 15)
+            {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << endl << "Invalid Answer (it has to be a Number on the List)! " << endl;
+            }
+            else
+                break;
+        }
+        while (true)
+        {
+            DrawColorList();
+            cout << endl << "Customizing Secondary Color. Choose a Color from the List Above!" << endl;
+            cin >> color2;
+            if (cin.fail() || color2 == 4 || color2 == 12 || color2 < 0 || color2 > 15)
+            {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << endl << "Invalid Answer (it has to be a Number on the List)! " << endl;
+            }
+            else
+                break;
+        }
+    }
+}
+
+void ScrabbleBoard::DrawGameBoard(unsigned int color1, unsigned int color2)
 {
     unsigned int chcolor;
     char drawch;
@@ -128,14 +186,15 @@ void ScrabbleBoard::DrawGameBoard(unsigned int textcolor)
             if (playedl[a][b] == '1')
                 chcolor = 4;
             else
-                chcolor = textcolor;
+                chcolor = color2;
             SetColor(chcolor);
             drawch = ' ';
             if (isalpha(gameboard[a][b]))
                 drawch = gameboard[a][b];
             cout << drawch << "  ";
-            SetColor(1);
+            SetColor(color2);
         }
+        SetColor(color1);
         cout << endl;
     }
     cout << endl << endl;
@@ -206,7 +265,6 @@ bool ScrabbleBoard::IsolatedLetter(int line, int col)
 {
     return WLeft(line, col) + WRight(line, col) + WUp(line, col) + WDown(line, col) == 0;
 }
-
 
 bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
 {
@@ -523,4 +581,3 @@ void ScrabbleBoard::Logo()
     }
     cout << endl << endl;
 }
-
