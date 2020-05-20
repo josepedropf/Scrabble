@@ -29,6 +29,7 @@ using namespace std;
 #define YELLOW 14
 #define WHITE 15
 
+// The Descriptions (Comments) of the Functions are on the Header Files
 int main()
 {
     Pool pool;
