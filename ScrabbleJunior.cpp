@@ -169,14 +169,17 @@ int main()
                 }
             }
             cout << endl << "------------  ";
-            sb.SetColor(stextcolor);
+            sb.SetColor(11);
             cout << playername;
             sb.SetColor(mtextcolor);
             cout << "'s TURN  " << "------------" << endl;
-            sb.SetColor(stextcolor);
+            sb.SetColor(11);
             cout << playername;
             sb.SetColor(mtextcolor);
-            cout << "'s SCORE: " << playerscore << endl;
+            cout << "'s SCORE: ";
+            sb.SetColor(11);
+            cout << playerscore << endl;
+            sb.SetColor(mtextcolor);
             cout << "scorechips: " << sb.scorechips << endl;
             sb.DrawGameBoard(mtextcolor, stextcolor);
             pool.WritePlrPool(playerpool, playername, mtextcolor, stextcolor);
@@ -305,11 +308,11 @@ int main()
                 if (i == 0)
                     winnername = fplayername;
                 cout << endl << places[i];
-                sb.SetColor(stextcolor);
+                sb.SetColor(11);
                 cout << fplayername;
                 sb.SetColor(mtextcolor);
                 cout << " with ";
-                sb.SetColor(stextcolor);
+                sb.SetColor(11);
                 cout << points[i][1];
                 sb.SetColor(mtextcolor);
                 cout << " Points." << endl;
@@ -320,7 +323,7 @@ int main()
             if (!draw)
             {
                 cout << endl << "---------------  ";
-                sb.SetColor(stextcolor);
+                sb.SetColor(11);
                 cout << winnername;
                 sb.SetColor(mtextcolor);
                 cout << " WINS!!!" << "  ---------------" << endl;
