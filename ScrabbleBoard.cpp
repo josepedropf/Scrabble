@@ -189,7 +189,7 @@ void ScrabbleBoard::DrawGameBoard(unsigned int color1, unsigned int color2)
                 chcolor = color2;
             SetColor(chcolor);
             drawch = ' ';
-            if (isalpha(gameboard[a][b]))
+            if (isalpha(gameboard[a][b]) || gameboard[a][b] == char("'"))
                 drawch = gameboard[a][b];
             cout << drawch << "  ";
             SetColor(color2);
@@ -268,7 +268,7 @@ bool ScrabbleBoard::IsolatedLetter(int line, int col)
 
 bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
 {
-    if (isalpha(gameboard[line][col]) && (worientation != 2 || playedl[line][col] != '1'))
+    if (isalpha(gameboard[line][col] || gameboard[line][col] == char("'")) && (worientation != 2 || playedl[line][col] != '1'))
     {
         if (IsolatedLetter(line, col))
             return true;
