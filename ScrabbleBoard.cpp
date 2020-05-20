@@ -525,7 +525,7 @@ void ScrabbleBoard::IAPlayer(vector<char> &plrpool, vector<char> advpool, int &l
                 maxadvscore = advscore;
         }
         iascore -= 0.5 * maxadvscore;
-        if (iascore > maxiascore)
+        if (iascore >= maxiascore)
         {
             maxiascore = iascore;
             bestplay = i;
