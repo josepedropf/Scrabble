@@ -116,9 +116,9 @@ void ScrabbleBoard::DrawColorList()
 {
     cout << endl << "Color List: " << endl;
     cout << endl << "Black -> 0" << endl << "Blue -> 1" << endl << "Green -> 2" << endl << "Cyan -> 3" <<
-    endl << "Magenta -> 5" << endl << "Brown -> 6" << endl << "Light Gray -> 7" << endl << "Dark Gray -> 8" <<
-    endl << "Light Blue -> 9" << endl << "Light Green -> 10" << endl << "Light Cyan -> 11" <<
-    endl << "Light Magenta -> 13" << endl << "Yellow -> 14" << endl << "White -> 15" << endl;
+         endl << "Magenta -> 5" << endl << "Brown -> 6" << endl << "Light Gray -> 7" << endl << "Dark Gray -> 8" <<
+         endl << "Light Blue -> 9" << endl << "Light Green -> 10" << endl << "Light Cyan -> 11" <<
+         endl << "Light Magenta -> 13" << endl << "Yellow -> 14" << endl << "White -> 15" << endl;
 }
 
 void ScrabbleBoard::CustomizeColor(unsigned int &color1, unsigned int &color2)
@@ -189,7 +189,7 @@ void ScrabbleBoard::DrawGameBoard(unsigned int color1, unsigned int color2)
                 chcolor = color2;
             SetColor(chcolor);
             drawch = ' ';
-            if (isalpha(gameboard[a][b]) || gameboard[a][b] == char("'"))
+            if (isalpha(gameboard[a][b]))
                 drawch = gameboard[a][b];
             cout << drawch << "  ";
             SetColor(color2);
@@ -268,7 +268,7 @@ bool ScrabbleBoard::IsolatedLetter(int line, int col)
 
 bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
 {
-    if (isalpha(gameboard[line][col]) || gameboard[line][col] == char("'") && (worientation != 2 || playedl[line][col] != '1'))
+    if (isalpha(gameboard[line][col]) && (worientation != 2 || playedl[line][col] != '1'))
     {
         if (IsolatedLetter(line, col))
             return true;
