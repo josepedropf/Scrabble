@@ -47,15 +47,25 @@ public:
     // Transforms the second String coordinate into an integer
     string StringCoord(bool &forceend, bool &playing);
     // Gets the user Input for the coordinates
+    // The 4 Functions return true if the letter in the given coordinates 
+    // only has played letters between itself and the beggining (Left and Up) or the end of the word (Right and Down)
+    // depending on the direction of the word we want to analise
     bool CompCheckLeft(int line, int col);
     bool CompCheckRight(int line, int col);
     bool CompCheckUp(int line, int col);
     bool CompCheckDown(int line, int col);
     int TurnScore(int line, int col, bool chips);
+    // Calculates the Score of a turn, decreasing the number of non-assigned score chips acordingly
     bool PlayPossible(vector <char> plrpool);
+    // Checks whether the characters that are possible to play are present in the player pool
+    // Returns true if at least one play is possible
     vector <vector<int>> IAPossibilities(vector <char> &plrpool);
+    // Retruns a vector with the coordinates of the possible plays of the IA
     void IAPlayer(vector <char> &plrpool, vector <char> advpool, int &line, int &col);
+    // Simulates an IA Player. Sees one round into the future and uses the best possible play
+    // of the oponent in that following round as well as it's own best outcome to decide what to do
     void Logo();
+    // Draws a special board that works as a logo for the game
 
 };
 
