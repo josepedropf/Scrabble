@@ -195,6 +195,8 @@ int main()
                     else
                     {
                         scoord = sb.StringCoord(forceend, playing);
+                        if (forceend)
+                            turncount = 3;
                         line = sb.GetLine(scoord);
                         col = sb.GetCol(scoord);
                     }
