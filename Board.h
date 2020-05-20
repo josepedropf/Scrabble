@@ -59,6 +59,7 @@ public:
     // Asks the user for a word and if it is valid for the given position and orientation, calls WordPlacer
     void DrawBoard(int boardsize, vector <vector<char>> gameboard);
     // Draws the Board with the NumberCode for each spot, which other functions utilize
+    // Used for Debug purposes
     // NumberCode: 
     // 0 -> Free Spot 
     // 1 -> Occupied Spot
