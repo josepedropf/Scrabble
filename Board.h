@@ -13,12 +13,19 @@ public:
     const vector <char> upper_letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
                                          'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
     void Lowerstr(string &astring);
+    // Applies tolower to all the chars of a string
     void Upperstr(string &astring);
+    // Applies toupper to all the chars of a string
     bool IsLetter(char ch);
+    // Function like isalpha but also considers the char (') 
     void Letter_to_Int_Pos(vector <int> &numberpos, string normalpos);
+    // Transforms a String ( two letters ) coordinate in a vector <int> coordinate
     bool ValidPos(vector <int> numberpos, int bsize, vector <vector<char>> gameboard);
+    // Checks whether a position is suitable to start a word
     void PickSize(int &boardsize);
+    // Asks and gets the Size of the Board
     bool EmptySpot(vector <vector<char>> gameboard, int boardsize);
+    // Retruns true if there is at least one valid position on the entire Board
     void GetWords(vector <string> &possible_words, vector <vector<char>> gameboard);
     void Coordinates(vector <vector<char>> &gameboard, int boardsize, vector <int> npos, vector <string> possible_words,
                      int mode);
