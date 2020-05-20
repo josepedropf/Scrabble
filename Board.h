@@ -27,9 +27,11 @@ public:
     bool EmptySpot(vector <vector<char>> gameboard, int boardsize);
     // Retruns true if there is at least one valid position on the entire Board
     void GetWords(vector <string> &possible_words, vector <vector<char>> gameboard);
+    // Takes the words from the Dictionary (Words.txt) and puts them in a vector possible_words
     void Coordinates(vector <vector<char>> &gameboard, int boardsize, vector <int> npos, vector <string> possible_words,
                      int mode);
-    int BinarySearch(vector<string> vs, int firstelem, int lastelem, char objective, int objpos);
+    // Asks the coordinates from the user and calls other functions like ValidPosition to ensure the viability of said coordinates
+    // Also applies the function RandomWordPlacement or PlayerWord depending on the mode in use
     int MaxRange(vector <int> numberpos, int orient, int boardsize, vector <vector<char>> gameboard);
     vector <string> MatchingWords(vector <int> numberpos, int orient, int boardsize, vector <string> possible_words,
                     vector <vector<char>> gameboard);
