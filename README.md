@@ -18,4 +18,4 @@ ScrabbleJunior
 	-Players are able to customize their names before the game itself begins.
 	-The colour scheme of the text and board can also be altered.
 
-Observations (optional):
+Approximate percentage estimate of collaboration of each member: ≈50% each
