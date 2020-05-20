@@ -268,7 +268,7 @@ bool ScrabbleBoard::IsolatedLetter(int line, int col)
 
 bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
 {
-    if (isalpha(gameboard[line][col] || gameboard[line][col] == char("'")) && (worientation != 2 || playedl[line][col] != '1'))
+    if (isalpha(gameboard[line][col]) || gameboard[line][col] == char("'") && (worientation != 2 || playedl[line][col] != '1'))
     {
         if (IsolatedLetter(line, col))
             return true;
