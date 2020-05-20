@@ -12,7 +12,7 @@ or have both the coordinates and the words be random.
 	-The resulting board may be saved to a file and the user is allowed to make a different board 
 if need be (different boards can be made and saved without restarting the program)
 
-ScrabbleJunior
+ScrabbleJunior:
   All the objectives were accomplished and several improvements were made:
 	-An AI feature is available, allowing the user to choose how many AI will play, if any.
 	-Players are able to customize their names before the game itself begins.
