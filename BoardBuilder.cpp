@@ -4,7 +4,7 @@
 #include "Board.h"
 using namespace std;
 
-// The Descriptions of the Functions are on the Header Files
+// The Descriptions (Comments) of the Functions are on the Header Files
 int main()
 {
     int mode = 1;
