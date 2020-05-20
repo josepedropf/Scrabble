@@ -1,9 +1,15 @@
-#include "ScrabbleBoard.h"
 #include <iostream>
 #include <fstream>
-#include <windows.h>
-#include <vector>
 #include <string>
+#include <cstdlib>
+#include <vector>
+#include <ctime>
+#include <algorithm>
+#include <windows.h>
+#include "ScrabbleBoard.h"
+#include "Pool.h"
+#include "Player.h"
+
 using namespace std;
 
 #define BLACK 0
@@ -23,561 +29,333 @@ using namespace std;
 #define YELLOW 14
 #define WHITE 15
 
-// 0 -> Vertical
-// 1 -> Horizontal
-
-void ScrabbleBoard::OpenBoard(const string& filename)
+int main()
 {
-    gameboard.clear();
-    vector <int> linepos, colpos, orient;
-    vector <char> boardline;
-    vector <string> words;
-    string word;
-    ifstream boardfile;
-    string txtfilename = filename + ".txt";
-    boardfile.open(txtfilename);
-    string line;
-    getline(boardfile, line);
-    if (line[1] == 'x')
-        boardsize = line[0];
-    else
+    Pool pool;
+    Player plr;
+    ScrabbleBoard sb;
+    string filen;
+    unsigned int mtextcolor = 1, stextcolor = 2;
+    int turn, turncount = 0, rranswer = 1;
+    int initiald = 7, line = 0, col = 0;
+    string scoord;
+    bool playing = true, validp, rr = true, forceend = false;
+    sb.SetColor(mtextcolor);
+    while (rr)
     {
-        string bs = line.substr(0, 2);
-        boardsize = stoi(bs);
-    }
-    while (true)
-    {
-        getline(boardfile, line);
-        if (line.empty())
-            break;
-        else
+        if (rranswer == 0)
         {
-            scorechips ++;
-            for (int i = 0; i < lower_letters.size(); i++)
-            {
-                if (lower_letters[i] == line[1])
-                    colpos.push_back(i);
-                if (upper_letters[i] == line[0])
-                    linepos.push_back(i);
-            }
-            if (line[3] == 'H')
-                orient.push_back(1);
-            else
-                orient.push_back(0);
-            word.clear();
-            for (int i = 5; i < line.size(); i++)
-            {
-                word.push_back(line[i]);
-            }
-            words.push_back(word);
+            plr.scorep1 = plr.scorep2 = plr.scorep3 = plr.scorep4 = 0;
+            sb.gameboard.clear();
+            playing = true;
+            forceend = false;
+            sb.playedl.clear();
+            sb.scorechips = 0;
+            pool.pool.clear();
+            pool.charp1.clear();
+            pool.charp2.clear();
+            pool.charp3.clear();
+            pool.charp4.clear();
+            plr.ia1 = plr.ia2 = plr.ia3 = plr.ia4 = false;
         }
-    }
-    for (int i = 0; i < boardsize; i++)
-    {
-        boardline.push_back('0');
-    }
-
-    for (int i = 0; i < boardsize; i++)
-    {
-        gameboard.push_back(boardline);
-        playedl.push_back(boardline);
-    }
-
-    for (int i = 0; i < linepos.size(); i++)
-    {
-        string wrd = words[i];
-        for (int a = 0; a < wrd.size(); a++)
+        sb.Logo();
+        cout << endl << "What's the path or name of the Board File (without .txt) : ";
+        while(true)
         {
-            switch (orient[i])
+            cin >> filen;
+            if (cin.fail())
             {
-                case 0:
-                {
-                    gameboard[linepos[i] + a][colpos[i]] = wrd[a];
-                    break;
-                }
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << endl << "Invalid File Name!" << endl;
+                cout << "What's the name of the Board File (without .txt) : ";
+            }
+            fstream Bfile(filen + ".txt");
+            if (Bfile.fail())
+            {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << endl << "Invalid File Name!" << endl;
+                cout << "What's the name of the Board File (without .txt) : ";
+            }
+            else
+                break;
+        }
+        sb.OpenBoard(filen);
+        sb.DrawGameBoard(mtextcolor, stextcolor);
+        pool.InitialPool(sb.gameboard, sb.boardsize, mtextcolor, stextcolor);
+        sb.CustomizeColor(mtextcolor, stextcolor);
+        plr.GetPlayers();
+        plr.GetIA();
+        int cn = 1;
+        while(true)
+        {
+            cout << endl << "Do you want to customize your names? [0 for No || Any other number for Yes] ";
+            cin >> cn;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << endl << "Invalid Answer (it has to be a Number)! " << endl;
+            }
+            else
+                break;
+        }
+
+        if (cn != 0)
+            plr.CustomPlayerNames();
+
+        if (pool.pool.size() >= 7 * plr.nplayers)
+            initiald = 7;
+        else
+            initiald = pool.pool.size() / plr.nplayers;
+        pool.InitialDraw(initiald, plr.nplayers);
+        srand(time(0));
+        turn = rand() % plr.nplayers + 1;
+        string playername;
+        vector <char> playerpool, adversariepool;
+        int playerscore = 0;
+        bool isia = false;
+        while (playing)
+        {
+            if (turn < plr.nplayers)
+                turn ++;
+            else
+                turn = 1;
+            turncount = 0;
+            playerscore = 0;
+            switch (turn)
+            {
                 case 1:
                 {
-                    gameboard[linepos[i]][colpos[i] + a] = wrd[a];
+                    playerscore = plr.scorep1;
+                    isia = plr.ia1;
+                    playername = plr.pname1;
+                    playerpool = pool.charp1;
+                    adversariepool = pool.charp2;
+                    break;
+                }
+                case 2:
+                {
+                    playerscore = plr.scorep2;
+                    isia = plr.ia2;
+                    playername = plr.pname2;
+                    playerpool = pool.charp2;
+                    if (plr.nplayers >= 3)
+                        adversariepool = pool.charp3;
+                    else
+                        adversariepool = pool.charp1;
+                    break;
+                }
+                case 3:
+                {
+                    playerscore = plr.scorep3;
+                    isia = plr.ia3;
+                    playername = plr.pname3;
+                    playerpool = pool.charp3;
+                    if (plr.nplayers >= 4)
+                        adversariepool = pool.charp4;
+                    else
+                        adversariepool = pool.charp1;
+                    break;
+                }
+                case 4:
+                {
+                    playerscore = plr.scorep4;
+                    isia = plr.ia4;
+                    playername = plr.pname4;
+                    playerpool = pool.charp4;
+                    adversariepool = pool.charp1;
                     break;
                 }
             }
-        }
-    }
-    boardfile.close();
-}
-
-void ScrabbleBoard::SetColor(unsigned int color)
-{
-    HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hcon, color);
-}
-
-void ScrabbleBoard::DrawColorList()
-{
-    cout << endl << "Color List: " << endl;
-    cout << endl << "Black -> 0" << endl << "Blue -> 1" << endl << "Green -> 2" << endl << "Cyan -> 3" <<
-         endl << "Magenta -> 5" << endl << "Brown -> 6" << endl << "Light Gray -> 7" << endl << "Dark Gray -> 8" <<
-         endl << "Light Blue -> 9" << endl << "Light Green -> 10" << endl << "Light Cyan -> 11" <<
-         endl << "Light Magenta -> 13" << endl << "Yellow -> 14" << endl << "White -> 15" << endl;
-}
-
-void ScrabbleBoard::CustomizeColor(unsigned int &color1, unsigned int &color2)
-{
-    int custc = 0;
-    while(true)
-    {
-        cout << endl << "Do you want to customize the game's colors? [0 for No || Any other number for Yes] ";
-        cin >> custc;
-        if (cin.fail())
-        {
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cout << endl << "Invalid Answer (it has to be a Number)! " << endl;
-        }
-        else
-            break;
-    }
-    if (custc != 0)
-    {
-        while (true)
-        {
-            DrawColorList();
-            cout << endl << "Customizing Main Color. Choose a Color from the List Above!" << endl;
-            cin >> color1;
-            if (cin.fail() || color1 == 4 || color1 == 12 || color1 < 0 || color1 > 15)
+            cout << endl << "------------  ";
+            sb.SetColor(11);
+            cout << playername;
+            sb.SetColor(mtextcolor);
+            cout << "'s TURN  " << "------------" << endl;
+            sb.SetColor(11);
+            cout << playername;
+            sb.SetColor(mtextcolor);
+            cout << "'s SCORE: ";
+            sb.SetColor(11);
+            cout << playerscore << endl;
+            sb.SetColor(mtextcolor);
+            cout << "scorechips: " << sb.scorechips << endl;
+            while (turncount < 2 && sb.PlayPossible(playerpool))
             {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << endl << "Invalid Answer (it has to be a Number on the List)! " << endl;
-            }
-            else
-                break;
-        }
-        while (true)
-        {
-            DrawColorList();
-            cout << endl << "Customizing Secondary Color. Choose a Color from the List Above!" << endl;
-            cin >> color2;
-            if (cin.fail() || color2 == 4 || color2 == 12 || color2 < 0 || color2 > 15)
-            {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << endl << "Invalid Answer (it has to be a Number on the List)! " << endl;
-            }
-            else
-                break;
-        }
-    }
-}
-
-void ScrabbleBoard::DrawGameBoard(unsigned int color1, unsigned int color2)
-{
-    unsigned int chcolor;
-    char drawch;
-    cout << endl << "   ";
-    for (int i = 0; i < boardsize; i++)
-        cout << lower_letters[i] << "  ";
-    cout << endl;
-    for (int a = 0; a < boardsize; a++)
-    {
-        cout << upper_letters[a] << "  ";
-        for (int b = 0; b < boardsize; b++)
-        {
-            if (playedl[a][b] == '1')
-                chcolor = 4;
-            else
-                chcolor = color2;
-            SetColor(chcolor);
-            drawch = ' ';
-            if (gameboard[a][b] != '0')
-                drawch = gameboard[a][b];
-            cout << drawch << "  ";
-            SetColor(color2);
-        }
-        SetColor(color1);
-        cout << endl;
-    }
-    cout << endl << endl;
-}
-
-
-int ScrabbleBoard::WLeft(int line, int col)
-{
-    if (col != 0)
-    {
-        if (gameboard[line][col - 1] == '0')
-            return 0;
-        else if (playedl[line][col - 1] == '1')
-            return 2;
-        else
-            return 1;
-    }
-    else
-        return 0;
-}
-
-int ScrabbleBoard::WRight(int line, int col)
-{
-    if (col < boardsize - 1)
-    {
-        if (gameboard[line][col + 1] == '0')
-            return 0;
-        else if (playedl[line][col + 1] == '1')
-            return 2;
-        else
-            return 1;
-    }
-    else
-        return 0;
-}
-
-int ScrabbleBoard::WUp(int line, int col)
-{
-    if (line != 0)
-    {
-        if (gameboard[line - 1][col] == '0')
-            return 0;
-        else if (playedl[line - 1][col] == '1')
-            return 2;
-        else
-            return 1;
-    }
-    else
-        return 0;
-}
-
-int ScrabbleBoard::WDown(int line, int col)
-{
-    if (line < boardsize - 1)
-    {
-        if (gameboard[line + 1][col] == '0')
-            return 0;
-        else if (playedl[line + 1][col] == '1')
-            return 2;
-        else
-            return 1;
-    }
-    else
-        return 0;
-}
-
-bool ScrabbleBoard::IsolatedLetter(int line, int col)
-{
-    return WLeft(line, col) + WRight(line, col) + WUp(line, col) + WDown(line, col) == 0;
-}
-
-bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
-{
-    if (gameboard[line][col] != '0' && (worientation != 2 || playedl[line][col] != '1'))
-    {
-        if (IsolatedLetter(line, col))
-            return true;
-        if (worientation != 1 && (WLeft(line, col) == 0 && WRight(line, col) != 0))
-        {
-            return true;
-        }
-        if (worientation != 0 && (WUp(line, col) == 0 && WDown(line, col) != 0))
-        {
-            return true;
-        }
-        if (worientation != 1 && WLeft(line, col) == 2)
-        {
-            return ValidPosition(line, col - 1, 0);
-        }
-        if (worientation != 0 && WUp(line, col) == 2)
-        {
-            return ValidPosition(line - 1, col, 1);
-        }
-    }
-    return false;
-}
-
-bool ScrabbleBoard::ValidLetter(int line, int col, vector<char> &plrpool)
-{
-    int splrpool = plrpool.size();
-    if (!ValidPosition(line, col, 2))
-        return false;
-    else
-    {
-        for (int i = 0; i < splrpool; i++)
-        {
-            if (plrpool[i] == gameboard[line][col])
-            {
-                plrpool.erase(plrpool.begin() + i);
-                return true;
-            }
-        }
-        return false;
-    }
-}
-
-int ScrabbleBoard::GetLine(string scoord)
-{
-    char chline = scoord[0];
-    chline = toupper(chline);
-    for (int i = 0; i < upper_letters.size(); i++)
-    {
-        if (upper_letters[i] == chline)
-            return i;
-    }
-    return 0;
-}
-
-int ScrabbleBoard::GetCol(string scoord)
-{
-    char chcol = scoord[1];
-    chcol = tolower(chcol);
-    for (int i = 0; i < lower_letters.size(); i++)
-    {
-        if (lower_letters[i] == chcol)
-            return i;
-    }
-    return 0;
-}
-
-
-string ScrabbleBoard::StringCoord(bool &forceend, bool &playing)
-{
-    string sc;
-    while (true)
-    {
-        cout << endl << "Coordinates must be indicated with one Capital Letter Followed by one Lowercase Letter according to the Board." << endl;
-        cout << "Introduce the Coordinates [or <end> if you want to quit]: ";
-        cin >> sc;
-        if (cin.fail())
-        {
-            cin.clear();
-            cin.ignore(1000, '\n');
-        }
-        else if (sc == "end")
-        {
-            forceend = true;
-            playing = false;
-            break;
-        }
-        else if (sc.size() != 2)
-        {
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cout << endl << "The Coordinates must be exactly Two Letters!" << endl;
-        }
-        else if (int(lower_letters[boardsize - 1]) < int(tolower(sc[0])) || int(upper_letters[boardsize - 1]) < int(toupper(sc[1])))
-        {
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cout << endl << "The Letters must be in the Board!" << endl;
-        }
-        else
-            break;
-    }
-    return sc;
-}
-
-bool ScrabbleBoard::CompCheckLeft(int line, int col)
-{
-    if (WLeft(line, col) == 0 && WRight(line, col) == 0)
-        return false;
-    else
-    {
-        if (WLeft(line, col) == 0)
-            return true;
-        else if (WLeft(line, col) == 2)
-            return CompCheckLeft(line, col - 1);
-        else
-            return false;
-    }
-}
-
-bool ScrabbleBoard::CompCheckRight(int line, int col)
-{
-    if (WLeft(line, col) == 0 && WRight(line, col) == 0)
-        return false;
-    else
-    {
-        if (WRight(line, col) == 0)
-            return true;
-        else if (WRight(line, col) == 2)
-            return CompCheckRight(line, col + 1);
-        else
-            return false;
-    }
-}
-
-bool ScrabbleBoard::CompCheckUp(int line, int col)
-{
-    if (WUp(line, col) == 0 && WDown(line, col) == 0)
-        return false;
-    else
-    {
-        if (WUp(line, col) == 0)
-            return true;
-        else if (WUp(line, col) == 2)
-            return CompCheckUp(line - 1, col);
-        else
-            return false;
-    }
-}
-
-bool ScrabbleBoard::CompCheckDown(int line, int col)
-{
-    if (WUp(line, col) == 0 && WDown(line, col) == 0)
-        return false;
-    else
-    {
-        if (WDown(line, col) == 0)
-            return true;
-        else if (WDown(line, col) == 2)
-            return CompCheckDown(line + 1, col);
-        else
-            return false;
-    }
-}
-
-int ScrabbleBoard::TurnScore(int line, int col, bool chips)
-{
-    int tscore = 0;
-    if (IsolatedLetter(line, col))
-    {
-        tscore = 1;
-    }
-    else
-    {
-        if (CompCheckLeft(line, col) && CompCheckRight(line, col))
-            tscore += 1;
-        if (CompCheckUp(line, col) && CompCheckDown(line, col))
-            tscore += 1;
-    }
-    if (chips)
-        scorechips -= tscore;
-    return tscore;
-}
-
-bool ScrabbleBoard::PlayPossible(vector<char> plrpool)
-{
-    vector <char> validl;
-    for (int a = 0; a < boardsize; a++)
-    {
-        for (int b = 0; b < boardsize; b++)
-        {
-            if (ValidPosition(a, b, 2))
-                validl.push_back(gameboard[a][b]);
-        }
-    }
-    if (validl.empty())
-        return false;
-    int sizepp = plrpool.size();
-    int sizevl = validl.size();
-    for (int c = 0; c < sizepp; c++)
-    {
-        for (int d = 0; d < sizevl; d++)
-        {
-            if (plrpool[c] == validl[d])
-                return true;
-        }
-    }
-    return false;
-}
-
-vector <vector<int>> ScrabbleBoard::IAPossibilities(vector<char> &plrpool)
-{
-    vector <vector<int>> allp;
-    vector <int> coordp;
-    for (int a = 0; a < boardsize; a++)
-    {
-        for (int b = 0; b < boardsize; b++)
-        {
-            if (ValidPosition(a, b, 2))
-            {
-                for (char c : plrpool)
+                validp = false;
+                sb.DrawGameBoard(mtextcolor, stextcolor);
+                pool.WritePlrPool(playerpool, playername, mtextcolor, stextcolor);
+                while (playing && !validp)
                 {
-                    coordp.clear();
-                    if (gameboard[a][b] == c)
+                    if (isia)
+                        sb.IAPlayer(playerpool, adversariepool, line, col);
+                    else
                     {
-                        coordp.push_back(a);
-                        coordp.push_back(b);
-                        allp.push_back(coordp);
-                        break;
+                        scoord = sb.StringCoord(forceend, playing);
+                        if (forceend)
+                        {
+                            turncount = 3;
+                            break;
+                        }
+                        line = sb.GetLine(scoord);
+                        col = sb.GetCol(scoord);
+                    }
+                    if (sb.ValidLetter(line, col, playerpool))
+                    {
+                        playerscore += sb.TurnScore(line, col, true);
+                        sb.playedl[line][col] = '1';
+                        turncount += 1;
+                        validp = true;
+                    }
+                    else
+                    {
+                        if (!forceend)
+                            cout << endl << "Invalid Letter for the current Board Layout!" << endl;
                     }
                 }
             }
-        }
-    }
-    return allp;
-}
 
-void ScrabbleBoard::IAPlayer(vector<char> &plrpool, vector<char> advpool, int &line, int &col)
-{
-    vector <vector<int>> pplays = IAPossibilities(plrpool);
-    vector <vector<int>> future = IAPossibilities(advpool);
-    int iascore = 0, maxiascore = 0;
-    int advscore = 0, maxadvscore = 0;
-    int bestplay = 0;
-    vector <int> allscores;
-    int pplayssize = pplays.size();
-    int futsize = future.size();
-    for (int i = 0; i < pplayssize; i++)
-    {
-        iascore = TurnScore(pplays[i][0], pplays[i][1], false);
-        for (int i = 0; i < futsize; i++)
-        {
-            advscore = TurnScore(future[i][0], future[i][1], false);
-            if (advscore > maxadvscore)
-                maxadvscore = advscore;
-        }
-        iascore -= 0.5 * maxadvscore;
-        if (iascore >= maxiascore)
-        {
-            maxiascore = iascore;
-            bestplay = i;
-        }
-    }
-    line = pplays[bestplay][0];
-    col = pplays[bestplay][1];
-}
-
-void ScrabbleBoard::Logo()
-{
-    int logosize = 15;
-    char drawch;
-    vector <vector<char>> logo =    {{'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-                                     {'0', '0', 'F', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-                                     {'S', 'C', 'R', 'A', 'B', 'B', 'L', 'E', '0', 'J', 'U', 'N', 'I', 'O', 'R'},
-                                     {'0', '0', 'E', '0', '0', '0', '0', '0', '0', 'O', '0', '0', '0', '0', '0'},
-                                     {'0', '0', 'D', '0', '0', '0', '0', '0', '0', 'S', '0', '0', '0', '0', '0'},
-                                     {'0', 'F', 'E', 'U', 'P', '0', '0', '0', '0', 'E', '0', '0', '0', '0', '0'},
-                                     {'0', '0', 'R', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-                                     {'0', 'M', 'I', 'E', 'I', 'C', '0', '0', '0', 'P', 'R', 'O', 'G', '0', '0'},
-                                     {'0', '0', 'C', '0', '0', '0', '0', '0', '0', 'E', '0', '0', '0', '0', '0'},
-                                     {'0', '0', 'O', '0', '0', '0', '0', '0', '0', 'D', '0', '0', '0', '0', '0'},
-                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', 'R', '0', '0', '0', '0', '0'},
-                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', 'O', '0', '0', '0', '0', '0'},
-                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-                                     {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}};
-    cout << "Welcome to " << endl;
-    cout << endl << "   ";
-    for (int i = 0; i < logosize; i++)
-        cout << lower_letters[i] << "  ";
-    cout << endl;
-    for (int a = 0; a < logosize; a++)
-    {
-        cout << upper_letters[a] << "  ";
-        for (int b = 0; b < logosize; b++)
-        {
-            SetColor(1);
-            drawch = ' ';
-            if (isalpha(logo[a][b]))
-                drawch = logo[a][b];
-            if (a == 3)
-                SetColor(4);
-            else if ((a == 6 && b != 9) || a == 8)
-                SetColor(2);
+            if (turncount != 0 && !forceend)
+            {
+                pool.DrawPoolTurn(playerpool, min(turncount, pool.pool.size()));
+            }
             else
-                SetColor(11);
-            cout << drawch << "  ";
-            SetColor(1);
+            {
+                if (!pool.pool.empty())
+                    pool.ExchangeTiles(playerpool);
+            }
+            switch (turn)
+            {
+                case 1:
+                {
+                    plr.scorep1 = playerscore;
+                    pool.charp1 = playerpool;
+                    break;
+                }
+                case 2:
+                {
+                    plr.scorep2 = playerscore;
+                    pool.charp2 = playerpool;
+                    break;
+                }
+                case 3:
+                {
+                    plr.scorep3 = playerscore;
+                    pool.charp3 = playerpool;
+                    break;
+                }
+                case 4:
+                {
+                    plr.scorep4 = playerscore;
+                    pool.charp4 = playerpool;
+                    break;
+                }
+            }
+
+            if (sb.scorechips == 0)
+                playing = false;
         }
-        cout << endl;
+
+        if (!forceend)
+        {
+            string fplayername, winnername;
+            bool draw = false;
+            vector <string> places = {"First Place:  ", "Second Place: ", "Third Place:  ", "Fourth Place: "};
+            vector <vector<int>> points;
+            plr.fscorep1 = {1, plr.scorep1};
+            plr.fscorep2 = {2, plr.scorep2};
+            plr.fscorep3 = {3, plr.scorep3};
+            plr.fscorep4 = {4, plr.scorep4};
+            points.push_back(plr.fscorep1);
+            points.push_back(plr.fscorep2);
+            if (plr.nplayers >= 3)
+                points.push_back(plr.fscorep3);
+            if (plr.nplayers >= 4)
+                points.push_back(plr.fscorep4);
+
+            sort(points.begin(), points.end(), [] (const vector <int> &v1, const vector <int> &v2)
+            {
+                return v1[1] > v2[1];
+            });
+
+            for (int i = 0; i <points.size() - 1; i++)
+            {
+                if (points[i][1] == points[i + 1][1])
+                    places[i + 1] = places[i];
+            }
+
+            for (int i = 0; i < points.size(); i++)
+            {
+                switch (points[i][0])
+                {
+                    case 1:
+                    {
+                        fplayername = plr.pname1;
+                        break;
+                    }
+                    case 2:
+                    {
+                        fplayername = plr.pname2;
+                        break;
+                    }
+                    case 3:
+                    {
+                        fplayername = plr.pname3;
+                        break;
+                    }
+                    case 4:
+                    {
+                        fplayername = plr.pname4;
+                        break;
+                    }
+                }
+
+                if (i == 0)
+                    winnername = fplayername;
+                cout << endl << places[i];
+                sb.SetColor(11);
+                cout << fplayername;
+                sb.SetColor(mtextcolor);
+                cout << " with ";
+                sb.SetColor(11);
+                cout << points[i][1];
+                sb.SetColor(mtextcolor);
+                cout << " Points." << endl;
+            }
+
+            draw = places[0] == places[1];
+
+            if (!draw)
+            {
+                cout << endl << "---------------  ";
+                sb.SetColor(11);
+                cout << winnername;
+                sb.SetColor(mtextcolor);
+                cout << " WINS!!!" << "  ---------------" << endl;
+            }
+            else
+                cout << endl << "---------------  " << "DRAW" << "  ---------------" << endl;
+        }
+
+        cout << endl << "END";
+
+        while(true)
+        {
+            cout << endl << "Do you want to Restart? [0 for No || Any other number for Yes] ";
+            cin >> rranswer;
+            if(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << endl << "Invalid Answer (it has to be a Number)! " << endl;
+            }
+            else
+                break;
+        }
+        if (rranswer == 0)
+            rr = false;
+        rranswer = 0;
     }
-    cout << endl << endl;
 }
