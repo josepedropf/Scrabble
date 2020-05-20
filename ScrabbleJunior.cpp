@@ -56,6 +56,7 @@ int main()
             pool.charp2.clear();
             pool.charp3.clear();
             pool.charp4.clear();
+            plr.ia1 = plr.ia2 = plr.ia3 = plr.ia4 = false;
         }
         sb.Logo();
         cout << endl << "What's the path or name of the Board File (without .txt) : ";
