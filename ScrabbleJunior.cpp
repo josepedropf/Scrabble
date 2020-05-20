@@ -206,11 +206,14 @@ int main()
                         validp = true;
                     }
                     else
-                        cout << endl << "Invalid Letter for the current Board Layout!" << endl;
+                    {
+                        if (!forceend)
+                            cout << endl << "Invalid Letter for the current Board Layout!" << endl;       
+                    }
                 }
             }
 
-            if (turncount != 0)
+            if (turncount != 0 && !forceend)
             {
                 pool.DrawPoolTurn(playerpool, min(turncount, pool.pool.size()));
             }
