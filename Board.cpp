@@ -521,7 +521,7 @@ void Board::Coordinates(vector <vector<char>> &gameboard,
     {
         DrawBoardClean(boardsize, gameboard);
         cout << endl << endl << endl;
-        DrawBoard(boardsize, gameboard);
+        // DrawBoard(boardsize, gameboard);
         cout << endl << "Coordinates must be indicated as two letters having in base the board above." << endl;
         cout << "Introduce the coordinates of the first letter of the word "
                 "(or end if you don't want to add more words to the board): ";
@@ -759,7 +759,7 @@ void Board::RandomBoard(int boardsize, vector <int> npos, vector <vector<char>> 
             }
         }
         DrawBoardClean(boardsize, gameboard);
-        DrawBoard(boardsize, gameboard);
+        // DrawBoard(boardsize, gameboard);
     }
     DrawBoardClean(boardsize, gameboard);
 }
