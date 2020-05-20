@@ -8,7 +8,7 @@ bool Board::IsLetter(char ch)
 {
     for (int i = 0; i < lower_letters.size(); i++)
     {
-        if (ch == lower_letters[i] || ch == upper_letters[i] || ch == char("'"))
+        if (ch == lower_letters[i] || ch == upper_letters[i] || ch == '\'')
             return true;
     }
     return false;
