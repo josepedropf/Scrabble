@@ -64,7 +64,7 @@ void ScrabbleBoard::OpenBoard(const string& filename)
                 orient.push_back(1);
             else
                 orient.push_back(0);
-            word = "";
+            word.clear();
             for (int i = 5; i < line.size(); i++)
             {
                 word.push_back(line[i]);
@@ -189,7 +189,7 @@ void ScrabbleBoard::DrawGameBoard(unsigned int color1, unsigned int color2)
                 chcolor = color2;
             SetColor(chcolor);
             drawch = ' ';
-            if (isalpha(gameboard[a][b]))
+            if (gameboard[a][b] != '0')
                 drawch = gameboard[a][b];
             cout << drawch << "  ";
             SetColor(color2);
@@ -268,7 +268,7 @@ bool ScrabbleBoard::IsolatedLetter(int line, int col)
 
 bool ScrabbleBoard::ValidPosition(int line, int col, int worientation)
 {
-    if (isalpha(gameboard[line][col]) && (worientation != 2 || playedl[line][col] != '1'))
+    if (gameboard[line][col] != '0' && (worientation != 2 || playedl[line][col] != '1'))
     {
         if (IsolatedLetter(line, col))
             return true;
