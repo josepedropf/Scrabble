@@ -635,20 +635,20 @@ void Board::GetWords(vector <string> &possible_words, vector <vector<char>> game
 
 void Board::DrawBoard(int boardsize, vector <vector<char>> gameboard)
 {
-    //cout << "   ";
+    cout << "   ";
     for (int i = 0; i < boardsize; i++)
-        //cout << lower_letters[i] << "  ";
-    //cout << endl;
+        cout << lower_letters[i] << "  ";
+    cout << endl;
     for (int a = 0; a < boardsize; a++)
     {
-        //cout << upper_letters[a] << "  ";
+        cout << upper_letters[a] << "  ";
         for (int b = 0; b < boardsize; b++)
         {
-            //cout << gameboard[a][b] << "  ";
+            cout << gameboard[a][b] << "  ";
         }
-        //cout << endl;
+        cout << endl;
     }
-    // << endl;
+    cout << endl;
 }
 
 void Board::DrawBoardClean(int boardsize,  vector <vector<char>> gameboard)
