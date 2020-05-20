@@ -201,22 +201,6 @@ bool Board::ValidWord(vector <int> numberpos, int orient, int boardsize, vector 
     return true;
 }
 
-int Board::BinarySearch(vector<string> vs, int firstelem, int lastelem, char objective, int objpos)
-{
-    int mid = 0;
-    if (lastelem >= firstelem)
-    {
-        mid = firstelem + (lastelem - firstelem) / 2;
-        if (vs[mid][objpos] == objective)
-            return mid;
-        if (vs[mid][objpos] > objective)
-            return BinarySearch(vs, firstelem, mid - 1, objective, objpos);
-        else
-            return BinarySearch(vs, mid + 1, lastelem, objective, objpos);
-    }
-    return -1;
-}
-
 int Board::MaxRange(vector<int> numberpos, int orient, int boardsize, vector<vector<char> > gameboard)
 {
     int maxrange = boardsize - numberpos[orient];
