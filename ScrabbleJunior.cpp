@@ -181,8 +181,6 @@ int main()
             cout << playerscore << endl;
             sb.SetColor(mtextcolor);
             cout << "scorechips: " << sb.scorechips << endl;
-            sb.DrawGameBoard(mtextcolor, stextcolor);
-            pool.WritePlrPool(playerpool, playername, mtextcolor, stextcolor);
             while (turncount < 2 && sb.PlayPossible(playerpool))
             {
                 validp = false;
